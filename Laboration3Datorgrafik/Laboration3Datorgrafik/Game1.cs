@@ -16,8 +16,14 @@ namespace Laboration3Datorgrafik
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        GraphicsDeviceManager graphics;
+        GraphicsDevice device;
+        Camera camera;
+        VertexBuffer vertexBuffer;
+        Ground ground;
+
+        Effect effect;
 
         public Game1()
         {
@@ -35,6 +41,12 @@ namespace Laboration3Datorgrafik
         {
             // TODO: Add your initialization logic here
 
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.IsFullScreen = false;
+            graphics.ApplyChanges();
+            Window.Title = "Datorgrafik Lab 3";
+
             base.Initialize();
         }
 
@@ -46,8 +58,25 @@ namespace Laboration3Datorgrafik
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            effect = Content.Load<Effect>("effects");
+            device = GraphicsDevice;
+            
+            ground = new Ground(GraphicsDevice);
+            SetUpVertices();
+            this.camera = new Camera(GraphicsDevice, new Vector3(0, 5, 6));
             // TODO: use this.Content to load your game content here
+        }
+
+        private void SetUpVertices()
+        {
+            VertexPositionColor[] vertices = new VertexPositionColor[3];
+
+            vertices[0] = new VertexPositionColor(new Vector3(-2, 2, 0), Color.Red);
+            vertices[1] = new VertexPositionColor(new Vector3(2, -2, -2), Color.Green);
+            vertices[2] = new VertexPositionColor(new Vector3(0, 0, 2), Color.Yellow);
+
+            vertexBuffer = new VertexBuffer(device, VertexPositionColor.VertexDeclaration, vertices.Length, BufferUsage.WriteOnly);
+            vertexBuffer.SetData(vertices);
         }
 
         /// <summary>
@@ -81,10 +110,22 @@ namespace Laboration3Datorgrafik
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
-            // TODO: Add your drawing code here
+            effect.CurrentTechnique = effect.Techniques["ColoredNoShading"];
+            effect.Parameters["xView"].SetValue(camera.ViewMatrix);
+            effect.Parameters["xProjection"].SetValue(camera.ProjectionMatrix);
+            effect.Parameters["xWorld"].SetValue(Matrix.Identity);
 
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+
+                
+                device.SetVertexBuffer(vertexBuffer);
+                device.DrawPrimitives(PrimitiveType.TriangleList, 0, 1);
+            }
+            ground.Draw(effect);
             base.Draw(gameTime);
         }
     }
