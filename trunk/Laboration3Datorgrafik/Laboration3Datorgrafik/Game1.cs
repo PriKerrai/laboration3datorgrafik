@@ -24,6 +24,8 @@ namespace Laboration3Datorgrafik
         VertexBuffer vertexBuffer;
         Ground ground;
 
+        FlyingCamera fCamera;
+
         Effect effect;
 
         public Game1()
@@ -61,7 +63,10 @@ namespace Laboration3Datorgrafik
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
             device = GraphicsDevice;
-            
+
+            fCamera = new FlyingCamera();
+
+
             ground = new Ground(GraphicsDevice);
             SetUpVertices();
             this.camera = new Camera(GraphicsDevice, new Vector3(0, 5, 6));
@@ -99,6 +104,9 @@ namespace Laboration3Datorgrafik
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+
+            fCamera.ProcessInput(gameTime);
+            camera.Update(fCamera.Position, fCamera.Rotation);
 
             // TODO: Add your update logic here
 
