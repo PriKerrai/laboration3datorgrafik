@@ -34,7 +34,9 @@ namespace Laboration3Datorgrafik
             nearPlaneDistance = 1f;
             farPlaneDistance = 200f;
 
-            this.ViewMatrix = Matrix.CreateLookAt(this.CameraPos, new Vector3(0, 0, 1), new Vector3(0, 1, 0));
+            //startingPosition = new Vector3(500,100000,10);
+
+            this.ViewMatrix = Matrix.CreateLookAt(this.CameraPos, new Vector3(1, 1, 1), new Vector3(0, 10, 0));
             this.ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(
                 MathHelper.PiOver4, this.AspectRatio, this.nearPlaneDistance, this.farPlaneDistance);
         }
