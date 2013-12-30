@@ -28,6 +28,13 @@ namespace Laboration3Datorgrafik
 
         Effect effect;
 
+        Model jeep;
+        Vector3 jeepPosition = Vector3.Zero;
+        Vector3 cameraPosition = new Vector3(0.0f, 50.0f, 5000.0f);
+        float jeepRotation = 0.0f;
+        float aspectRatio;
+        
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -63,9 +70,10 @@ namespace Laboration3Datorgrafik
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
             device = GraphicsDevice;
-
+            jeep = Content.Load<Model>("Models\\jeep");
             fCamera = new FlyingCamera();
 
+            aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
 
             ground = new Ground(GraphicsDevice);
             SetUpVertices();
@@ -120,6 +128,28 @@ namespace Laboration3Datorgrafik
         protected override void Draw(GameTime gameTime)
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+
+
+            Matrix[] transforms = new Matrix[jeep.Bones.Count];
+            jeep.CopyAbsoluteBoneTransformsTo(transforms);
+
+            foreach(ModelMesh mesh in jeep.Meshes)
+            {
+                foreach(BasicEffect effecT in mesh.Effects)
+                {
+                    effecT.EnableDefaultLighting();
+                    
+                    effecT.World = transforms[mesh.ParentBone.Index] *
+                    Matrix.CreateRotationY(jeepRotation) *
+                    Matrix.CreateTranslation(jeepPosition);
+
+                    effecT.View = Matrix.CreateLookAt(cameraPosition, Vector3.Zero, Vector3.Up);
+                    effecT.Projection = Matrix.CreatePerspectiveFieldOfView(
+                        MathHelper.ToRadians(45.0f), aspectRatio, 1.0f, 10000.0f);
+                }
+                mesh.Draw();
+            }
+
 
             effect.CurrentTechnique = effect.Techniques["ColoredNoShading"];
             effect.Parameters["xView"].SetValue(camera.ViewMatrix);
