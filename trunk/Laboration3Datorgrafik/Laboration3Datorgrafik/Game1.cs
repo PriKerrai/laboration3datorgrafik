@@ -28,10 +28,11 @@ namespace Laboration3Datorgrafik
 
         Effect effect;
 
+        RenderManager renderManager;
+
         Model jeep;
         Vector3 jeepPosition = Vector3.Zero;
         Vector3 cameraPosition = new Vector3(0.0f, 50.0f, 5000.0f);
-        float jeepRotation = 0.0f;
         float aspectRatio;
         
 
@@ -39,6 +40,7 @@ namespace Laboration3Datorgrafik
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
         }
 
         /// <summary>
@@ -56,7 +58,10 @@ namespace Laboration3Datorgrafik
             graphics.IsFullScreen = false;
             graphics.ApplyChanges();
             Window.Title = "Datorgrafik Lab 3";
+            this.camera = new Camera(GraphicsDevice, new Vector3(0, 5, 6));
 
+            renderManager = new RenderManager(Content, camera);
+            renderManager.AddModelToWorldWithPosition(new Vector3(3, 3, 0), "Models\\jeep");
             base.Initialize();
         }
 
@@ -70,14 +75,14 @@ namespace Laboration3Datorgrafik
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
             device = GraphicsDevice;
-            jeep = Content.Load<Model>("Models\\jeep");
+            //jeep = Content.Load<Model>("Models\\jeep");
             fCamera = new FlyingCamera();
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
 
             ground = new Ground(GraphicsDevice);
             SetUpVertices();
-            this.camera = new Camera(GraphicsDevice, new Vector3(0, 5, 6));
+            renderManager.Load();
             // TODO: use this.Content to load your game content here
         }
 
@@ -129,28 +134,8 @@ namespace Laboration3Datorgrafik
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
-
-            Matrix[] transforms = new Matrix[jeep.Bones.Count];
-            jeep.CopyAbsoluteBoneTransformsTo(transforms);
-
-            foreach(ModelMesh mesh in jeep.Meshes)
-            {
-                foreach(BasicEffect effecT in mesh.Effects)
-                {
-                    effecT.EnableDefaultLighting();
-                    
-                    effecT.World = transforms[mesh.ParentBone.Index] *
-                    Matrix.CreateRotationY(jeepRotation) *
-                    Matrix.CreateTranslation(jeepPosition);
-
-                    effecT.View = Matrix.CreateLookAt(cameraPosition, Vector3.Zero, Vector3.Up);
-                    effecT.Projection = Matrix.CreatePerspectiveFieldOfView(
-                        MathHelper.ToRadians(45.0f), aspectRatio, 1.0f, 10000.0f);
-                }
-                mesh.Draw();
-            }
-
-
+            renderManager.Draw();
+            
             effect.CurrentTechnique = effect.Techniques["ColoredNoShading"];
             effect.Parameters["xView"].SetValue(camera.ViewMatrix);
             effect.Parameters["xProjection"].SetValue(camera.ProjectionMatrix);
