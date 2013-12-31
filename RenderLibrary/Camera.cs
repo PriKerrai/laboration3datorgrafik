@@ -5,11 +5,8 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Laboration3Datorgrafik
+namespace RenderLibrary
 {
-        
-    
-
     public class Camera
     {
         private GraphicsDevice device;
