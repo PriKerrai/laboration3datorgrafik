@@ -52,6 +52,13 @@
     <Folder Include="Texture\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ambient.fx">
+      <Name>Ambient</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Models\jeep.fbx">
       <Name>jeep</Name>
       <Importer>FbxImporter</Importer>

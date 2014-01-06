@@ -61,19 +61,12 @@ namespace Laboration3Datorgrafik
 
         public void Draw(Effect effect)
         {
-            //effect.VertexColorEnabled = true;
-            //effect.World = Matrix.Identity;
-
-            //effect.Parameters["xView"].SetValue(ViewMatrix);
-            //effect.Parameters["xProjection"].SetValue(ProjectionMatrix);
-            //effect.Parameters["xWorld"].SetValue(Matrix.Identity);
-
-
 
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.SetVertexBuffer(groundBuffer);
+                
                 device.DrawPrimitives(PrimitiveType.TriangleList, 0, groundBuffer.VertexCount / 3);
             }
         }
