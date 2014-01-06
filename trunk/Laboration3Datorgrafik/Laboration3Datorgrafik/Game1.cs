@@ -26,7 +26,7 @@ namespace Laboration3Datorgrafik
 
         FlyingCamera fCamera;
 
-        Effect effect;
+        Effect effect, ambient;
 
         RenderManager renderManager;
 
@@ -61,7 +61,8 @@ namespace Laboration3Datorgrafik
             this.camera = new Camera(GraphicsDevice, new Vector3(0, 5, 6));
 
             renderManager = new RenderManager(Content, camera);
-            renderManager.AddModelToWorldWithPosition(new Vector3(3, 3, 0), "Models\\jeep");
+            renderManager.AddModelToWorldWithPosition(new Vector3(25, 0, 25), "Models\\jeep", 5f);
+            //renderManager.AddModelToWorldWithPosition(new Vector3(0, 10, 5), "Models\\Zeppelin_NT", 0.5f);
             base.Initialize();
         }
 
@@ -74,28 +75,16 @@ namespace Laboration3Datorgrafik
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
+            ambient = Content.Load<Effect>("Ambient");
+
             device = GraphicsDevice;
-            //jeep = Content.Load<Model>("Models\\jeep");
             fCamera = new FlyingCamera();
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
 
             ground = new Ground(GraphicsDevice);
-            SetUpVertices();
             renderManager.Load();
             // TODO: use this.Content to load your game content here
-        }
-
-        private void SetUpVertices()
-        {
-            VertexPositionColor[] vertices = new VertexPositionColor[3];
-
-            vertices[0] = new VertexPositionColor(new Vector3(-2, 2, 0), Color.Red);
-            vertices[1] = new VertexPositionColor(new Vector3(2, -2, -2), Color.Green);
-            vertices[2] = new VertexPositionColor(new Vector3(0, 0, 2), Color.Yellow);
-
-            vertexBuffer = new VertexBuffer(device, VertexPositionColor.VertexDeclaration, vertices.Length, BufferUsage.WriteOnly);
-            vertexBuffer.SetData(vertices);
         }
 
         /// <summary>
@@ -134,21 +123,12 @@ namespace Laboration3Datorgrafik
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
-            renderManager.Draw();
-            
             effect.CurrentTechnique = effect.Techniques["ColoredNoShading"];
             effect.Parameters["xView"].SetValue(camera.ViewMatrix);
             effect.Parameters["xProjection"].SetValue(camera.ProjectionMatrix);
             effect.Parameters["xWorld"].SetValue(Matrix.Identity);
 
-            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-
-                
-                device.SetVertexBuffer(vertexBuffer);
-                device.DrawPrimitives(PrimitiveType.TriangleList, 0, 1);
-            }
+            renderManager.Draw();
             ground.Draw(effect);
             base.Draw(gameTime);
         }

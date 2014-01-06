@@ -14,6 +14,7 @@ namespace RenderLibrary
         private List<BundleModel> bModels = new List<BundleModel>();
         private ContentManager Content;
         private Camera camera;
+        Effect ambientEffect;
 
         public RenderManager(ContentManager content, Camera camera) 
         {
@@ -21,11 +22,12 @@ namespace RenderLibrary
             this.camera = camera;
         }
 
-        public void AddModelToWorldWithPosition(Vector3 position, string modelPath)
-        { 
-
-            bModels.Add(new BundleModel(position, modelPath));
+        public void AddModelToWorldWithPosition(Vector3 position, string modelPath, float scale)
+        {
+            ambientEffect = Content.Load<Effect>("Ambient");
+            bModels.Add(new BundleModel(position, modelPath, scale));
         }
+
         public void Load() 
         {
             for (int i = 0; i < bModels.Count; i++)
@@ -40,17 +42,25 @@ namespace RenderLibrary
             {
                 foreach (ModelMesh mesh in bModels[i].bModel.Meshes)
                 {
-                    foreach (BasicEffect effecT in mesh.Effects)
+                    //foreach (BasicEffect effecT in mesh.Effects)
+                    //{
+                    //    effecT.EnableDefaultLighting();
+                    //    effecT.AmbientLightColor = Color.Red.ToVector3();
+                    //    effecT.View = camera.ViewMatrix;
+                    //    effecT.World = Matrix.Identity * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateTranslation(bModels[i].bPosition);
+                    //    effecT.Projection = camera.ProjectionMatrix;
+
+                    
+                    //}
+                    foreach (ModelMeshPart part in mesh.MeshParts)
                     {
-                        effecT.EnableDefaultLighting();
+                        part.Effect = ambientEffect;
 
-                        effecT.World = Matrix.Identity * Matrix.CreateTranslation(new Vector3(10, 1, 10));
-
-                        effecT.View = camera.ViewMatrix;
-
-                        effecT.Projection = camera.ProjectionMatrix;
-
-
+                        ambientEffect.Parameters["xView"].SetValue(camera.ViewMatrix);
+                        ambientEffect.Parameters["xProjection"].SetValue(camera.ProjectionMatrix);
+                        ambientEffect.Parameters["xWorld"].SetValue(Matrix.Identity * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateTranslation(bModels[i].bPosition));
+                        ambientEffect.Parameters["AmbientColor"].SetValue(Color.Green.ToVector4());
+                        ambientEffect.Parameters["AmbientIntensity"].SetValue(0.1f);
                     }
                     mesh.Draw();
                 }

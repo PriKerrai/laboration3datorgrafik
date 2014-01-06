@@ -10,7 +10,7 @@ namespace Laboration3Datorgrafik {
         public Vector3 Position { get; set; }
         public Quaternion Rotation { get; set; }
 
-        private float MoveSpeed = 0.5f;
+        private float MoveSpeed = 1.5f;
 
         public FlyingCamera() {
             this.Position = new Vector3(0,5,6);
@@ -28,29 +28,29 @@ namespace Laboration3Datorgrafik {
             KeyboardState keys = Keyboard.GetState();
 
             float yawRot = 0;
-            if (keys.IsKeyDown(Keys.Q))
+            if (keys.IsKeyDown(Keys.A))
                 yawRot += turningSpeed;
-            if (keys.IsKeyDown(Keys.E))
+            if (keys.IsKeyDown(Keys.D))
                 yawRot -= turningSpeed;
 
             float leftRightRot = 0;
-            if (keys.IsKeyDown(Keys.D))
+            if (keys.IsKeyDown(Keys.Q))
                 leftRightRot += turningSpeed;
-            if (keys.IsKeyDown(Keys.A))
+            if (keys.IsKeyDown(Keys.E))
                 leftRightRot -= turningSpeed;
 
             float upDownRot = 0;
-            if (keys.IsKeyDown(Keys.W))
+            if (keys.IsKeyDown(Keys.F))
                 upDownRot += turningSpeed;
-            if (keys.IsKeyDown(Keys.S))
+            if (keys.IsKeyDown(Keys.R))
                 upDownRot -= turningSpeed;
 
             float speed = 0;
-            if (keys.IsKeyDown(Keys.R))
+            if (keys.IsKeyDown(Keys.W))
                 speed += turningSpeed;
                 Vector3 addVectorForward = Vector3.Transform(new Vector3(0, 0, 2), Rotation);
                 Position += addVectorForward * speed;
-            if (keys.IsKeyDown(Keys.F))
+            if (keys.IsKeyDown(Keys.S))
                 speed -= turningSpeed;
                 Vector3 addVectorBackward = Vector3.Transform(new Vector3(0, 0, 2), Rotation);
                 Position += addVectorBackward * speed;
