@@ -10,9 +10,11 @@ namespace RenderLibrary
     public class Camera
     {
         private GraphicsDevice device;
+        public Vector3 viewVector { get; set; }
 
         public Matrix ViewMatrix { get; set; }
         public Matrix ProjectionMatrix { get; set; }
+        public Matrix WorldMatrix { get; set; }
         public Quaternion Rotation { get; set; }
         public Vector3 Position { get; set; }
         public Vector3 UpDirection { get; set; }
@@ -33,6 +35,7 @@ namespace RenderLibrary
 
             //startingPosition = new Vector3(500,100000,10);
 
+            this.WorldMatrix = Matrix.CreateTranslation(0, 0, 0);
             this.ViewMatrix = Matrix.CreateLookAt(this.CameraPos, new Vector3(1, 1, 1), new Vector3(0, 10, 0));
             this.ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(
                 MathHelper.PiOver4, this.AspectRatio, this.nearPlaneDistance, this.farPlaneDistance);
@@ -51,6 +54,9 @@ namespace RenderLibrary
 
             this.Position = campos;
             this.UpDirection = camup;
+
+            viewVector = Vector3.Transform(pos - this.Position, Matrix.CreateRotationY(0));
+            viewVector.Normalize();
 
             this.ViewMatrix = Matrix.CreateLookAt(this.Position, pos, this.UpDirection);
             this.ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(

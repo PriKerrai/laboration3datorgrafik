@@ -67,6 +67,7 @@ namespace Laboration3Datorgrafik
                 pass.Apply();
                 device.SetVertexBuffer(groundBuffer);
                 
+                
                 device.DrawPrimitives(PrimitiveType.TriangleList, 0, groundBuffer.VertexCount / 3);
             }
         }

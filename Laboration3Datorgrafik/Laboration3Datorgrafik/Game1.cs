@@ -31,6 +31,7 @@ namespace Laboration3Datorgrafik
         RenderManager renderManager;
 
         Model jeep;
+        Texture2D texture;
         Vector3 jeepPosition = Vector3.Zero;
         Vector3 cameraPosition = new Vector3(0.0f, 50.0f, 5000.0f);
         float aspectRatio;
@@ -58,10 +59,10 @@ namespace Laboration3Datorgrafik
             graphics.IsFullScreen = false;
             graphics.ApplyChanges();
             Window.Title = "Datorgrafik Lab 3";
-            this.camera = new Camera(GraphicsDevice, new Vector3(0, 5, 6));
+            this.camera = new Camera(GraphicsDevice, new Vector3(0, 0, 0));
 
             renderManager = new RenderManager(Content, camera);
-            renderManager.AddModelToWorldWithPosition(new Vector3(25, 0, 25), "Models\\jeep", 5f);
+            renderManager.AddModelToWorldWithPosition(new Vector3(0, 0, 0), "Models\\jeep", 5f);
             //renderManager.AddModelToWorldWithPosition(new Vector3(0, 10, 5), "Models\\Zeppelin_NT", 0.5f);
             base.Initialize();
         }
@@ -74,14 +75,13 @@ namespace Laboration3Datorgrafik
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            effect = Content.Load<Effect>("effects");
-            ambient = Content.Load<Effect>("Ambient");
+            effect = Content.Load<Effect>("Ambient");
 
             device = GraphicsDevice;
             fCamera = new FlyingCamera();
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
-
+            
             ground = new Ground(GraphicsDevice);
             renderManager.Load();
             // TODO: use this.Content to load your game content here
@@ -122,14 +122,14 @@ namespace Laboration3Datorgrafik
         protected override void Draw(GameTime gameTime)
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
-
-            effect.CurrentTechnique = effect.Techniques["ColoredNoShading"];
-            effect.Parameters["xView"].SetValue(camera.ViewMatrix);
-            effect.Parameters["xProjection"].SetValue(camera.ProjectionMatrix);
-            effect.Parameters["xWorld"].SetValue(Matrix.Identity);
-
+            
+            effect.Parameters["View"].SetValue(camera.ViewMatrix);
+            effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+            effect.Parameters["World"].SetValue(camera.WorldMatrix);
+            effect.Parameters["ModelTexture"].SetValue(texture);
+            //renderManager.DrawModel();
             renderManager.Draw();
-            ground.Draw(effect);
+            //ground.Draw(effect);
             base.Draw(gameTime);
         }
     }
