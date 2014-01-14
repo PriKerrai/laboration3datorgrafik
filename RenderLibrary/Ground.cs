@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Laboration3Datorgrafik
+namespace RenderLibrary
 {
     public class Ground
     {
@@ -59,16 +59,19 @@ namespace Laboration3Datorgrafik
             return vList;
         }
 
-        public void Draw(Effect effect)
+        public void Draw(Camera camera)
         {
-
+            BasicEffect effect = new BasicEffect(device);
+            effect.VertexColorEnabled = true;
+            effect.World = Matrix.Identity;
+            effect.View = camera.ViewMatrix;
+            effect.Projection = camera.ProjectionMatrix;
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
-                pass.Apply();
+                pass.Apply();         
                 device.SetVertexBuffer(groundBuffer);
-                
-                
                 device.DrawPrimitives(PrimitiveType.TriangleList, 0, groundBuffer.VertexCount / 3);
+                
             }
         }
     }
