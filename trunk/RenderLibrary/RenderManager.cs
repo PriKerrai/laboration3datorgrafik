@@ -15,21 +15,19 @@ namespace RenderLibrary
         private ContentManager Content;
         private Camera camera;
         Effect effect;
-        private Texture2D texture;
 
         public RenderManager(ContentManager content, Camera camera) 
         {
             Content = content;
             this.camera = camera;
+            effect = Content.Load<Effect>("Ambient"); 
         }
 
-        public void AddModelToWorldWithPosition(Vector3 position, string modelPath, float scale)
+
+        public void AddBundleModel(BundleModel bModel)
         {
-            effect = Content.Load<Effect>("Ambient");
-            texture = Content.Load<Texture2D>("Models\\fbx\\jeep-1");
-            bModels.Add(new BundleModel(position, modelPath, scale));
+            bModels.Add(bModel);
         }
-
         public void Load() 
         {
             for (int i = 0; i < bModels.Count; i++)
@@ -52,8 +50,10 @@ namespace RenderLibrary
                         effect.Parameters["View"].SetValue(camera.ViewMatrix);
                         effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                         effect.Parameters["ViewVector"].SetValue(camera.viewVector);
-                        effect.Parameters["ModelTexture"].SetValue(texture);
+                        effect.Parameters["ModelTexture"].SetValue(bModels[i].TexturePath[i]);
 
+                        
+                        Matrix scale = Matrix.CreateScale(bModels[i].bScale);
                         Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
                         effect.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
                     }
@@ -71,12 +71,20 @@ namespace RenderLibrary
                 {
                     foreach (BasicEffect effect in mesh.Effects)
                     {
-                        
+                        if (i == 0)
+                        {
+                            effect.DiffuseColor = new Vector3(1f, 1f, 1f);   
+                            effect.AmbientLightColor = new Vector3(1f, 1f, 1f);
+                        }
+                        effect.FogEnabled = true;
+                        effect.FogStart = 20f;
+                        effect.FogEnd = 30f;
                         effect.EnableDefaultLighting();
                         effect.PreferPerPixelLighting = true;
-                        effect.World = Matrix.Identity * mesh.ParentBone.Transform;
+                        effect.World = Matrix.Identity * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateTranslation(bModels[i].bPosition);
                         effect.View = camera.ViewMatrix;
                         effect.Projection = camera.ProjectionMatrix;
+                        
                     }
                     mesh.Draw();
                 }

@@ -24,6 +24,7 @@ namespace Laboration3Datorgrafik
         VertexBuffer vertexBuffer;
         Ground ground;
 
+
         FlyingCamera fCamera;
 
         Effect effect, ambient;
@@ -62,7 +63,18 @@ namespace Laboration3Datorgrafik
             this.camera = new Camera(GraphicsDevice, new Vector3(0, 0, 0));
 
             renderManager = new RenderManager(Content, camera);
-            renderManager.AddModelToWorldWithPosition(new Vector3(0, 0, 0), "Models\\jeep", 5f);
+            List<Texture2D> jeepTexturePaths = new List<Texture2D>();
+            List<Texture2D> hangarTexturePaths = new List<Texture2D>();
+            //jeepTexturePaths.Add(Content.Load<Texture2D>("Models\\fbx\\jeep-1"));
+            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-concrete-b"));
+            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-concrete"));
+            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-numbers"));
+            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-red-light"));
+            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-roof"));
+            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-windows")); 
+            renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 0), "Models\\jeep", 5f, jeepTexturePaths));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(10, 0, 10), "Models\\moffett-hangar2", 0.1f, hangarTexturePaths));
+            ground = new Ground(this.graphics.GraphicsDevice);
             //renderManager.AddModelToWorldWithPosition(new Vector3(0, 10, 5), "Models\\Zeppelin_NT", 0.5f);
             base.Initialize();
         }
@@ -127,9 +139,9 @@ namespace Laboration3Datorgrafik
             effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
             effect.Parameters["World"].SetValue(camera.WorldMatrix);
             effect.Parameters["ModelTexture"].SetValue(texture);
-            //renderManager.DrawModel();
-            renderManager.Draw();
-            //ground.Draw(effect);
+            renderManager.DrawModel();
+            //renderManager.Draw();
+          //  ground.Draw(camera);
             base.Draw(gameTime);
         }
     }
