@@ -65,13 +65,13 @@ namespace Laboration3Datorgrafik
             renderManager = new RenderManager(Content, camera);
             List<Texture2D> jeepTexturePaths = new List<Texture2D>();
             List<Texture2D> hangarTexturePaths = new List<Texture2D>();
-            //jeepTexturePaths.Add(Content.Load<Texture2D>("Models\\fbx\\jeep-1"));
-            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-concrete-b"));
-            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-concrete"));
-            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-numbers"));
-            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-red-light"));
-            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-roof"));
-            //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-windows")); 
+            jeepTexturePaths.Add(Content.Load<Texture2D>("Models\\fbx\\jeep-1"));
+            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-concrete-b"));
+            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-concrete"));
+            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-numbers"));
+            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-red-light"));
+            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-roof"));
+            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-windows")); 
             renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 0), "Models\\jeep", 5f, jeepTexturePaths));
             renderManager.AddBundleModel(new BundleModel(new Vector3(10, 0, 10), "Models\\moffett-hangar2", 0.1f, hangarTexturePaths));
             renderManager.AddBundleModel(new BundleModel(new Vector3(10, 10, 10), "Models\\sphere", 1, null));
@@ -140,8 +140,8 @@ namespace Laboration3Datorgrafik
             effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
             effect.Parameters["World"].SetValue(camera.WorldMatrix);
             effect.Parameters["ModelTexture"].SetValue(texture);
-            renderManager.DrawModel();
-            //renderManager.Draw();
+            //renderManager.DrawModel();
+            renderManager.Draw();
           //  ground.Draw(camera);
             base.Draw(gameTime);
         }

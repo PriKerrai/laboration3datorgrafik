@@ -46,14 +46,14 @@ namespace RenderLibrary
                     {
 
                         part.Effect = effect;
-                        effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform);
+                        effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateTranslation(bModels[i].bPosition));
                         effect.Parameters["View"].SetValue(camera.ViewMatrix);
                         effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                         effect.Parameters["ViewVector"].SetValue(camera.viewVector);
-                        effect.Parameters["ModelTexture"].SetValue(bModels[i].TexturePath[i]);
+                        effect.Parameters["ModelTexture"].SetValue(bModels[i].TexturePath[0]);
 
                         
-                        Matrix scale = Matrix.CreateScale(bModels[i].bScale);
+                    //    Matrix scale = Matrix.CreateScale(bModels[i].bScale);
                         Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
                         effect.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
                     }
