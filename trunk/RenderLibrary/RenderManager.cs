@@ -15,12 +15,14 @@ namespace RenderLibrary
         private ContentManager Content;
         private Camera camera;
         Effect effect;
+        Texture2D normalMap;
 
         public RenderManager(ContentManager content, Camera camera) 
         {
             Content = content;
             this.camera = camera;
-            effect = Content.Load<Effect>("Ambient"); 
+            effect = Content.Load<Effect>("effects");
+            normalMap = Content.Load<Texture2D>("Models\\normal_4");
         }
 
 
@@ -50,10 +52,10 @@ namespace RenderLibrary
                         effect.Parameters["View"].SetValue(camera.ViewMatrix);
                         effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                         effect.Parameters["ViewVector"].SetValue(camera.viewVector);
-                        effect.Parameters["ModelTexture"].SetValue(bModels[i].TexturePath[0]);
-
+                        effect.Parameters["ModelTexture"].SetValue(bModels[i].TexturePath);
+                        effect.Parameters["NormalMap"].SetValue(normalMap);
                         
-                    //    Matrix scale = Matrix.CreateScale(bModels[i].bScale);
+                        //Matrix scale = Matrix.CreateScale(bModels[i].bScale);
                         Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
                         effect.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
                     }
