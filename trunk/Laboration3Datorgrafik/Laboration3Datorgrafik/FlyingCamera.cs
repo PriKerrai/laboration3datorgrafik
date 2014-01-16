@@ -13,7 +13,7 @@ namespace Laboration3Datorgrafik {
         private float MoveSpeed = 1.5f;
 
         public FlyingCamera() {
-            this.Position = new Vector3(0,3,-10);
+            this.Position = new Vector3(0,12,-15);
             this.Rotation = Quaternion.Identity;
             //this.Rotation *= Quaternion.CreateFromAxisAngle(Vector3.Up, MathHelper.ToRadians(180));
 
