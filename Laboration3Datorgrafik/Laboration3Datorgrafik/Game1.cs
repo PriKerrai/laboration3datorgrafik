@@ -74,6 +74,7 @@ namespace Laboration3Datorgrafik
             //hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-windows")); 
             renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 0), "Models\\jeep", 5f, jeepTexturePaths));
             renderManager.AddBundleModel(new BundleModel(new Vector3(10, 0, 10), "Models\\moffett-hangar2", 0.1f, hangarTexturePaths));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(10, 10, 10), "Models\\sphere", 1, null));
             ground = new Ground(this.graphics.GraphicsDevice);
             //renderManager.AddModelToWorldWithPosition(new Vector3(0, 10, 5), "Models\\Zeppelin_NT", 0.5f);
             base.Initialize();
