@@ -21,7 +21,7 @@ namespace Laboration3Datorgrafik
         GraphicsDeviceManager graphics;
         GraphicsDevice device;
         Camera camera;
-        VertexBuffer vertexBuffer;
+
         Ground ground;
 
 
@@ -36,7 +36,8 @@ namespace Laboration3Datorgrafik
         Vector3 jeepPosition = Vector3.Zero;
         Vector3 cameraPosition = new Vector3(0.0f, 50.0f, 5000.0f);
         float aspectRatio;
-        
+
+        private Texture2D normalMap;
 
         public Game1()
         {
@@ -60,7 +61,7 @@ namespace Laboration3Datorgrafik
             graphics.IsFullScreen = false;
             graphics.ApplyChanges();
             Window.Title = "Datorgrafik Lab 3";
-            this.camera = new Camera(GraphicsDevice, new Vector3(0, 0, 0));
+            this.camera = new Camera(GraphicsDevice, new Vector3(0, 0, -10));
 
             renderManager = new RenderManager(Content, camera);
             List<Texture2D> jeepTexturePaths = new List<Texture2D>();
@@ -72,9 +73,12 @@ namespace Laboration3Datorgrafik
             hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-red-light"));
             hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-roof"));
             hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-windows")); 
-            renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 0), "Models\\jeep", 5f, jeepTexturePaths));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(10, 0, 10), "Models\\moffett-hangar2", 0.1f, hangarTexturePaths));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(10, 10, 10), "Models\\sphere", 1, null));
+            //renderManager.AddBundleModel(new BundleModel(new Vector3(1, 0, 2), "Models\\jeep", 0.8f, Content.Load<Texture2D>("Models\\fbx\\jeep-1")));
+            //renderManager.AddBundleModel(new BundleModel(new Vector3(0, 5, 2), "Models\\Helicopter", 0.8f, Content.Load<Texture2D>("Models\\fbx\\HelicopterTexture")));
+            //renderManager.AddBundleModel(new BundleModel(new Vector3(-4, 3, 3), "Models\\BeachBall", 0.8f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture")));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture")));
+            //renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1, Content.Load<Texture2D>("Models\\fbx\\textures-obs-tower-knuq")));
+            
             ground = new Ground(this.graphics.GraphicsDevice);
             //renderManager.AddModelToWorldWithPosition(new Vector3(0, 10, 5), "Models\\Zeppelin_NT", 0.5f);
             base.Initialize();
@@ -139,10 +143,14 @@ namespace Laboration3Datorgrafik
             effect.Parameters["View"].SetValue(camera.ViewMatrix);
             effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
             effect.Parameters["World"].SetValue(camera.WorldMatrix);
-            effect.Parameters["ModelTexture"].SetValue(texture);
+<<<<<<< .mine            
+            //effect.Parameters["ModelTexture"].SetValue(texture);
             //renderManager.DrawModel();
             renderManager.Draw();
-          //  ground.Draw(camera);
+=======            effect.Parameters["ModelTexture"].SetValue(texture);
+            //renderManager.DrawModel();
+            renderManager.Draw();
+>>>>>>> .theirs          //  ground.Draw(camera);
             base.Draw(gameTime);
         }
     }
