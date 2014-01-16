@@ -143,14 +143,13 @@ namespace Laboration3Datorgrafik
             effect.Parameters["View"].SetValue(camera.ViewMatrix);
             effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
             effect.Parameters["World"].SetValue(camera.WorldMatrix);
-<<<<<<< .mine            
+         
             //effect.Parameters["ModelTexture"].SetValue(texture);
             //renderManager.DrawModel();
-            renderManager.Draw();
-=======            effect.Parameters["ModelTexture"].SetValue(texture);
+
             //renderManager.DrawModel();
             renderManager.Draw();
->>>>>>> .theirs          //  ground.Draw(camera);
+        //  ground.Draw(camera);
             base.Draw(gameTime);
         }
     }
