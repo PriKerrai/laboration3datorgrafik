@@ -16,7 +16,6 @@ namespace RenderLibrary
         private Camera camera;
         Effect effectNormalMap,
                effectAmbient;
-        Texture2D normalMap;
 
         public RenderManager(ContentManager content, Camera camera) 
         {
@@ -56,6 +55,9 @@ namespace RenderLibrary
                             effectNormalMap.Parameters["ViewVector"].SetValue(camera.viewVector);
                             effectNormalMap.Parameters["ModelTexture"].SetValue(bModels[i].bTexturePath);
                             effectNormalMap.Parameters["NormalMap"].SetValue(bModels[i].bNormalMap);
+
+                            Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
+                            effectNormalMap.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
                         }
                         else
                         {
@@ -65,10 +67,11 @@ namespace RenderLibrary
                             effectAmbient.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                             effectAmbient.Parameters["ViewVector"].SetValue(camera.viewVector);
                             effectAmbient.Parameters["ModelTexture"].SetValue(bModels[i].bTexturePath);
+
+                            Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
+                            effectAmbient.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
                         }
-                        //Matrix scale = Matrix.CreateScale(bModels[i].bScale);
-                        Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
-                        effectNormalMap.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
+                        
                     }
                     mesh.Draw();
                 }
