@@ -14,15 +14,16 @@ namespace RenderLibrary
         private List<BundleModel> bModels = new List<BundleModel>();
         private ContentManager Content;
         private Camera camera;
-        Effect effect;
+        Effect effectNormalMap,
+               effectAmbient;
         Texture2D normalMap;
 
         public RenderManager(ContentManager content, Camera camera) 
         {
             Content = content;
             this.camera = camera;
-            effect = Content.Load<Effect>("effects");
-            normalMap = Content.Load<Texture2D>("Models\\normal_4");
+            effectNormalMap = Content.Load<Effect>("effects");
+            effectAmbient = Content.Load<Effect>("Ambient");
         }
 
 
@@ -34,7 +35,7 @@ namespace RenderLibrary
         {
             for (int i = 0; i < bModels.Count; i++)
             {
-                bModels[i].bModel = Content.Load<Model>(bModels[i].bPath);
+                bModels[i].bModel = Content.Load<Model>(bModels[i].bModelPath);
             }
         }
 
@@ -46,18 +47,28 @@ namespace RenderLibrary
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
-
-                        part.Effect = effect;
-                        effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateTranslation(bModels[i].bPosition));
-                        effect.Parameters["View"].SetValue(camera.ViewMatrix);
-                        effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                        effect.Parameters["ViewVector"].SetValue(camera.viewVector);
-                        effect.Parameters["ModelTexture"].SetValue(bModels[i].TexturePath);
-                        effect.Parameters["NormalMap"].SetValue(normalMap);
-                        
+                        if (bModels[i].bNormalMap != null)
+                        {
+                            part.Effect = effectNormalMap;
+                            effectNormalMap.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateTranslation(bModels[i].bPosition));
+                            effectNormalMap.Parameters["View"].SetValue(camera.ViewMatrix);
+                            effectNormalMap.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+                            effectNormalMap.Parameters["ViewVector"].SetValue(camera.viewVector);
+                            effectNormalMap.Parameters["ModelTexture"].SetValue(bModels[i].bTexturePath);
+                            effectNormalMap.Parameters["NormalMap"].SetValue(bModels[i].bNormalMap);
+                        }
+                        else
+                        {
+                            part.Effect = effectAmbient;
+                            effectAmbient.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateTranslation(bModels[i].bPosition));
+                            effectAmbient.Parameters["View"].SetValue(camera.ViewMatrix);
+                            effectAmbient.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+                            effectAmbient.Parameters["ViewVector"].SetValue(camera.viewVector);
+                            effectAmbient.Parameters["ModelTexture"].SetValue(bModels[i].bTexturePath);
+                        }
                         //Matrix scale = Matrix.CreateScale(bModels[i].bScale);
                         Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
-                        effect.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
+                        effectNormalMap.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
                     }
                     mesh.Draw();
                 }

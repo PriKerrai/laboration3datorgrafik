@@ -1,18 +1,19 @@
 float4x4 World;
 float4x4 View;
 float4x4 Projection;
+ 
+float4 AmbientColor = float4(1, 0, 1, 1);
+float AmbientIntensity = 0.1;
+
 float4x4 WorldInverseTranspose;
- 
-float4 AmbientColor = float4(1, 1, 1, 1);
-float AmbientIntensity = 0;
- 
-float3 DiffuseLightDirection = float3(0, 9, 0);
+
+float3 DiffuseLightDirection = float3(3, 10, -20);
 float4 DiffuseColor = float4(1, 1, 1, 1);
-float DiffuseIntensity = 1.0;
- 
-float Shininess = 1000;
-float4 SpecularColor = float4(1, 1, 1, 1);
-float SpecularIntensity = 2;
+float DiffuseIntensity = 0.04;
+
+float Shininess = 500;
+float4 SpecularColor = float4(1, 1, 1, 1);    
+float SpecularIntensity = 1;
 float3 ViewVector = float3(1, 0, 0);
  
 texture ModelTexture;
