@@ -54,8 +54,6 @@ namespace Laboration3Datorgrafik
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
             graphics.IsFullScreen = false;
@@ -66,18 +64,11 @@ namespace Laboration3Datorgrafik
             renderManager = new RenderManager(Content, camera);
             List<Texture2D> jeepTexturePaths = new List<Texture2D>();
             List<Texture2D> hangarTexturePaths = new List<Texture2D>();
-            jeepTexturePaths.Add(Content.Load<Texture2D>("Models\\fbx\\jeep-1"));
-            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-concrete-b"));
-            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-concrete"));
-            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-numbers"));
-            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-red-light"));
-            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-roof"));
-            hangarTexturePaths.Add(Content.Load<Texture2D>("Models\\moffett-hangar2-windows")); 
-            //renderManager.AddBundleModel(new BundleModel(new Vector3(1, 0, 2), "Models\\jeep", 0.8f, Content.Load<Texture2D>("Models\\fbx\\jeep-1")));
-            //renderManager.AddBundleModel(new BundleModel(new Vector3(0, 5, 2), "Models\\Helicopter", 0.8f, Content.Load<Texture2D>("Models\\fbx\\HelicopterTexture")));
-            //renderManager.AddBundleModel(new BundleModel(new Vector3(-4, 3, 3), "Models\\BeachBall", 0.8f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture")));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture")));
-            //renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1, Content.Load<Texture2D>("Models\\fbx\\textures-obs-tower-knuq")));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(1, 0, 2), "Models\\jeep", 0.8f, Content.Load<Texture2D>("Models\\fbx\\jeep-1")));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(0, 5, 2), "Models\\Helicopter", 0.8f, Content.Load<Texture2D>("Models\\fbx\\HelicopterTexture")));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(-4, 3, 3), "Models\\BeachBall", 0.8f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture")));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture"), Content.Load<Texture2D>("Models\\normal_4")));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1, Content.Load<Texture2D>("Models\\fbx\\textures-obs-tower-knuq")));
             
             ground = new Ground(this.graphics.GraphicsDevice);
             //renderManager.AddModelToWorldWithPosition(new Vector3(0, 10, 5), "Models\\Zeppelin_NT", 0.5f);
