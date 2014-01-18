@@ -22,22 +22,19 @@ namespace Laboration3Datorgrafik
         GraphicsDevice device;
         Camera camera;
 
-        Ground ground;
+        Floor floor;
 
 
         FlyingCamera fCamera;
 
-        Effect effect, ambient;
+        Effect effect, normalMapEffect;
 
         RenderManager renderManager;
 
-        Model jeep;
-        Texture2D texture;
         Vector3 jeepPosition = Vector3.Zero;
         Vector3 cameraPosition = new Vector3(0.0f, 50.0f, 5000.0f);
         float aspectRatio;
 
-        private Texture2D normalMap;
 
         public Game1()
         {
@@ -60,18 +57,20 @@ namespace Laboration3Datorgrafik
             graphics.ApplyChanges();
             Window.Title = "Datorgrafik Lab 3";
             this.camera = new Camera(GraphicsDevice, new Vector3(0, 0, -10));
-
+            device = GraphicsDevice;
             renderManager = new RenderManager(Content, camera);
             List<Texture2D> jeepTexturePaths = new List<Texture2D>();
             List<Texture2D> hangarTexturePaths = new List<Texture2D>();
-            renderManager.AddBundleModel(new BundleModel(new Vector3(1, 0, 2), "Models\\jeep", 0.8f, Content.Load<Texture2D>("Models\\fbx\\jeep-1")));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(0, 5, 2), "Models\\Helicopter", 0.8f, Content.Load<Texture2D>("Models\\fbx\\HelicopterTexture")));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(-4, 3, 3), "Models\\BeachBall", 0.8f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture")));
+           
+            renderManager.AddBundleModel(new BundleModel(new Vector3(1, 0, 2), "Models\\jeep", 0.8f, Content.Load<Texture2D>("Models\\fbx\\jeep-1"), MathHelper.ToRadians(0)));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f, Content.Load<Texture2D>("Models\\fbx\\HelicopterTexture"), MathHelper.ToRadians(0)));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(-1, 3, 3), "Models\\BeachBall", 0.4f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture"), MathHelper.ToRadians(0)));
             renderManager.AddBundleModel(new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture"), Content.Load<Texture2D>("Models\\normal_4")));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1, Content.Load<Texture2D>("Models\\fbx\\textures-obs-tower-knuq")));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1, Content.Load<Texture2D>("Models\\fbx\\textures-obs-tower-knuq"), MathHelper.ToRadians(0)));
+            //renderManager.AddBundleModel(new BundleModel(new Vector3(4, 1.6f, -2), "Models\\snowplow", 0.7f, Content.Load<Texture2D>("Models\\fbx\\jeep-1"), MathHelper.ToRadians(320)));
+
+            floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 100, 100, new Vector3(0, 0, 0));
             
-            ground = new Ground(this.graphics.GraphicsDevice);
-            //renderManager.AddModelToWorldWithPosition(new Vector3(0, 10, 5), "Models\\Zeppelin_NT", 0.5f);
             base.Initialize();
         }
 
@@ -83,14 +82,13 @@ namespace Laboration3Datorgrafik
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            
             effect = Content.Load<Effect>("Ambient");
-
-            device = GraphicsDevice;
+            normalMapEffect = Content.Load<Effect>("effects");
+            
             fCamera = new FlyingCamera();
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
-            
-            ground = new Ground(GraphicsDevice);
             renderManager.Load();
             // TODO: use this.Content to load your game content here
         }
@@ -129,18 +127,10 @@ namespace Laboration3Datorgrafik
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
-            
-            effect.Parameters["View"].SetValue(camera.ViewMatrix);
-            effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-            effect.Parameters["World"].SetValue(camera.WorldMatrix);
-         
-            //effect.Parameters["ModelTexture"].SetValue(texture);
-            //renderManager.DrawModel();
+            device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.LightGray, 1.0f, 0);
 
-            //renderManager.DrawModel();
+            floor.Draw(graphics.GraphicsDevice, effect, camera);
             renderManager.Draw();
-        //  ground.Draw(camera);
             base.Draw(gameTime);
         }
     }
