@@ -16,13 +16,23 @@ namespace RenderLibrary
         public float bScale { get; set; }
         public Texture2D bTexturePath { get; set; }
         public Texture2D bNormalMap {get; set; }
+        public float bRotation { get; set; }
 
-        public BundleModel(Vector3 position, string modelPath, float scale, Texture2D tPath)
+        public BundleModel(Vector3 position, Model model, float scale)
+        {
+            bPosition = position;
+            bModel = model;
+            bScale = scale;
+
+        }
+
+        public BundleModel(Vector3 position, string modelPath, float scale, Texture2D tPath, float radians)
         {
             this.bPosition = position;
             this.bModelPath = modelPath;
             this.bScale = scale;
             this.bTexturePath = tPath;
+            this.bRotation = radians;
         }
 
         public BundleModel(Vector3 position, string modelPath, float scale, Texture2D texture, Texture2D normalMap) 
