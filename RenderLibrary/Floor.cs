@@ -84,7 +84,7 @@ namespace RenderLibrary
             effect.Parameters["World"].SetValue(camera.WorldMatrix * Matrix.CreateScale(1) * Matrix.CreateTranslation(new Vector3(-25, 0, -25)));
             effect.Parameters["View"].SetValue(camera.ViewMatrix);
             effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-            effect.Parameters["ViewVector"].SetValue(camera.viewVector);
+            effect.Parameters["ViewVector"].SetValue(camera.Position);
             effect.Parameters["ModelTexture"].SetValue(_texture);
             //effect.Parameters["NormalMap"].SetValue(_normalMap);
             graphics.SetVertexBuffer(_vertexBuffer);

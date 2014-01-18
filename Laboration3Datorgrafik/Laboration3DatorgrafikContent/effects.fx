@@ -16,6 +16,12 @@ float4 SpecularColor = float4(1, 1, 1, 1);
 float SpecularIntensity = 1;
 float3 ViewVector = float3(1, 0, 0);
 
+//Fog settings
+uniform const bool FogEnabled;
+uniform const float FogStart;
+uniform const float FogEnd;
+uniform const float3 FogColor;
+
 texture ModelTexture;
 sampler2D textureSampler = sampler_state {
     Texture = (ModelTexture);
@@ -51,6 +57,7 @@ struct VertexShaderOutput
     float3 Normal : TEXCOORD1;
     float3 Tangent : TEXCOORD2;
     float3 Binormal : TEXCOORD3;
+	float3 WorldPosition : NORMAL0;
 };
 
 VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
@@ -66,6 +73,7 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     output.Binormal = normalize(mul(input.Binormal, WorldInverseTranspose));
 
     output.TextureCoordinate = input.TextureCoordinate;
+	output.WorldPosition = worldPosition;
     return output;
 }
 
@@ -94,14 +102,23 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
     textureColor.a = 1;
 
     // Combine all of these values into one (including the ambient light)
-    return saturate(textureColor * (diffuseIntensity) + AmbientColor * AmbientIntensity + specular);
+    float4 finalColor = saturate(textureColor * (diffuseIntensity) + AmbientColor * AmbientIntensity + specular);
+
+
+	if (FogEnabled)
+	{
+		float fogPower = saturate((length(ViewVector - input.WorldPosition) - FogStart) / (FogEnd - FogStart));
+		finalColor.rgba = lerp(finalColor.rgba, float4(FogColor, 1), fogPower);
+	}
+
+    return finalColor;
 }
 
 technique Specular 
 {
     pass Pass1
     {
-        VertexShader = compile vs_2_0 VertexShaderFunction();
-        PixelShader = compile ps_2_0 PixelShaderFunction();
+        VertexShader = compile vs_3_0 VertexShaderFunction();
+        PixelShader = compile ps_3_0 PixelShaderFunction();
     }
 }
