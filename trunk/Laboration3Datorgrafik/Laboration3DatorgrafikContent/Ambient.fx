@@ -1,6 +1,7 @@
 float4x4 World;
 float4x4 View;
 float4x4 Projection;
+float3 EyePosition;
  
 float4 AmbientColor = float4(1, 1, 1, 1);
 float AmbientIntensity = 0.1;
@@ -14,7 +15,7 @@ float DiffuseIntensity = 0.04;
 float Shininess = 400;
 float4 SpecularColor = float4(1, 1, 1, 1);    
 float SpecularIntensity = 1;
-float3 ViewVector = float3(1, 0, 0);
+float3 ViewVector;
  
 texture ModelTexture;
 sampler2D textureSampler = sampler_state {
@@ -25,6 +26,12 @@ sampler2D textureSampler = sampler_state {
     AddressV = Clamp;
 };
  
+//Fog settings
+uniform const bool FogEnabled;
+uniform const float FogStart;
+uniform const float FogEnd;
+uniform const float3 FogColor;
+
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
@@ -38,6 +45,7 @@ struct VertexShaderOutput
     float4 Color : COLOR0;
     float3 Normal : TEXCOORD0;
     float2 TextureCoordinate : TEXCOORD1;
+	float3 WorldPosition : NORMAL0;
 };
  
 VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
@@ -53,7 +61,7 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     output.Color = saturate(DiffuseColor * DiffuseIntensity * lightIntensity);
  
     output.Normal = normal;
- 
+	output.WorldPosition = worldPosition;
     output.TextureCoordinate = input.TextureCoordinate;
     return output;
 }
@@ -71,14 +79,22 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
     float4 textureColor = tex2D(textureSampler, input.TextureCoordinate);
     textureColor.a = 1;
  
-    return saturate(textureColor * (input.Color) + AmbientColor * AmbientIntensity + specular);
+	float4 finalColor = saturate(textureColor * (input.Color) + AmbientColor * AmbientIntensity + specular);
+
+	if (FogEnabled)
+	{
+		float fogPower = saturate((length(ViewVector - input.WorldPosition) - FogStart) / (FogEnd - FogStart));
+		finalColor.rgba = lerp(finalColor.rgba, float4(FogColor, 1), fogPower);
+	}
+
+    return finalColor;
 }
  
 technique Textured
 {
     pass Pass1
     {
-        VertexShader = compile vs_1_1 VertexShaderFunction();
-        PixelShader = compile ps_2_0 PixelShaderFunction();
+        VertexShader = compile vs_3_0 VertexShaderFunction();
+        PixelShader = compile ps_3_0 PixelShaderFunction();
     }
 }

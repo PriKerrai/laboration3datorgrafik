@@ -53,7 +53,7 @@ namespace RenderLibrary
                             effectNormalMap.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateRotationY(bModels[i].bRotation) * Matrix.CreateTranslation(bModels[i].bPosition));
                             effectNormalMap.Parameters["View"].SetValue(camera.ViewMatrix);
                             effectNormalMap.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                            effectNormalMap.Parameters["ViewVector"].SetValue(camera.viewVector);
+                            effectNormalMap.Parameters["ViewVector"].SetValue(camera.Position);
                             effectNormalMap.Parameters["ModelTexture"].SetValue(bModels[i].bTexturePath);
                             effectNormalMap.Parameters["NormalMap"].SetValue(bModels[i].bNormalMap);
                             
@@ -66,7 +66,7 @@ namespace RenderLibrary
                             effectAmbient.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateRotationY(bModels[i].bRotation) * Matrix.CreateTranslation(bModels[i].bPosition));
                             effectAmbient.Parameters["View"].SetValue(camera.ViewMatrix);
                             effectAmbient.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                            effectAmbient.Parameters["ViewVector"].SetValue(camera.viewVector);
+                            effectAmbient.Parameters["ViewVector"].SetValue(camera.Position);
                             effectAmbient.Parameters["ModelTexture"].SetValue(bModels[i].bTexturePath);
                             
                             Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));

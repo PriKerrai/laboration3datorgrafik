@@ -85,7 +85,17 @@ namespace Laboration3Datorgrafik
             
             effect = Content.Load<Effect>("Ambient");
             normalMapEffect = Content.Load<Effect>("effects");
-            
+
+            effect.Parameters["FogEnabled"].SetValue(true);
+            effect.Parameters["FogStart"].SetValue(15);
+            effect.Parameters["FogEnd"].SetValue(30);
+            effect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
+
+            normalMapEffect.Parameters["FogEnabled"].SetValue(true);
+            normalMapEffect.Parameters["FogStart"].SetValue(15);
+            normalMapEffect.Parameters["FogEnd"].SetValue(30);
+            normalMapEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
+
             fCamera = new FlyingCamera();
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
@@ -127,7 +137,7 @@ namespace Laboration3Datorgrafik
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.LightGray, 1.0f, 0);
+            device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkGray, 1.0f, 0);
 
             floor.Draw(graphics.GraphicsDevice, effect, camera);
             renderManager.Draw();
