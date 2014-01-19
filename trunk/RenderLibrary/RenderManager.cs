@@ -35,6 +35,8 @@ namespace RenderLibrary
             for (int i = 0; i < bModels.Count; i++)
             {
                 bModels[i].bModel = Content.Load<Model>(bModels[i].bModelPath);
+                if (bModels[i].bTexturePath == null)
+                    bModels[i].GetTextures(effectAmbient);
             }
         }
 
@@ -68,7 +70,7 @@ namespace RenderLibrary
                             effectAmbient.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                             effectAmbient.Parameters["ViewVector"].SetValue(camera.Position);
                             effectAmbient.Parameters["ModelTexture"].SetValue(bModels[i].bTexturePath);
-                            
+
                             Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
                             effectAmbient.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
                         }

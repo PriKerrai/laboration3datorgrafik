@@ -19,7 +19,7 @@ namespace RenderLibrary
         protected Matrix World { get; set; }
 
         public Floor(GraphicsDevice graphics, Texture2D texture, Texture2D normalMap, ushort width, ushort height, Vector3 position)
-            : base(position, null, 0)
+            : base(null, position, 0)
         {
             _texture = texture;
             _normalMap = normalMap;

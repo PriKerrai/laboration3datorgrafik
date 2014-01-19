@@ -18,12 +18,19 @@ namespace RenderLibrary
         public Texture2D bNormalMap {get; set; }
         public float bRotation { get; set; }
 
-        public BundleModel(Vector3 position, Model model, float scale)
+        public BundleModel( Model model, Vector3 position, float scale)
         {
             bPosition = position;
             bModel = model;
             bScale = scale;
 
+        }
+        public BundleModel(Vector3 position, string modelPath, float scale)
+        {
+            bPosition = position;
+            bModelPath = modelPath;
+            bScale = scale;
+            
         }
 
         public BundleModel(Vector3 position, string modelPath, float scale, Texture2D tPath, float radians)
@@ -42,6 +49,22 @@ namespace RenderLibrary
             this.bScale = scale;
             this.bTexturePath = texture;
             this.bNormalMap = normalMap;
+        }
+        public void GetTextures(Effect effectAmbient)
+        {
+            if (bModel != null)
+            {
+                foreach (ModelMesh mesh in bModel.Meshes)
+                {
+                    foreach (ModelMeshPart part in mesh.MeshParts)
+                    {
+                        Texture2D texture = ((BasicEffect)part.Effect).Texture;
+
+                        part.Effect = effectAmbient.Clone();
+                        part.Effect.Parameters["ModelTexture"].SetValue(texture);
+                    }
+                }
+            }
         }
             
     }
