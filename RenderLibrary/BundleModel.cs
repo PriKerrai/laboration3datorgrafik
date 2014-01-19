@@ -59,9 +59,13 @@ namespace RenderLibrary
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
                         Texture2D texture = ((BasicEffect)part.Effect).Texture;
-
+                        Vector3 diffuse = ((BasicEffect)part.Effect).DiffuseColor;
                         part.Effect = effectAmbient.Clone();
+
+                        
                         part.Effect.Parameters["ModelTexture"].SetValue(texture);
+                        part.Effect.Parameters["isColor2"].SetValue(true);
+                        part.Effect.Parameters["DiffuseColor2"].SetValue(new Vector4(diffuse, 0.0f));
                     }
                 }
             }

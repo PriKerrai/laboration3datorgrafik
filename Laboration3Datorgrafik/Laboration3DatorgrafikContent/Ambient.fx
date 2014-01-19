@@ -9,7 +9,9 @@ float AmbientIntensity = 0.1;
 float4x4 WorldInverseTranspose;
 
 float3 DiffuseLightDirection = float3(3, 10, -20);
-float4 DiffuseColor = float4(1, 1, 1, 1);
+float4 DiffuseColor = float4(0.5, 0, 0, 0);
+float4 DiffuseColor2;
+bool isColor2;
 float DiffuseIntensity = 0.04;
 float3 DirectionalLightDirection;
 
@@ -52,14 +54,16 @@ struct VertexShaderOutput
 VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
     VertexShaderOutput output;
- 
+	float4 dColor = DiffuseColor;
+	if(isColor2)
+		dColor = DiffuseColor2;
     float4 worldPosition = mul(input.Position, World);
     float4 viewPosition = mul(worldPosition, View);
     output.Position = mul(viewPosition, Projection);
  
     float4 normal = normalize(mul(input.Normal, WorldInverseTranspose));
     float lightIntensity = dot(normal, DiffuseLightDirection);
-    output.Color = saturate(DiffuseColor * DiffuseIntensity * lightIntensity);
+    output.Color = saturate(dColor * DiffuseIntensity * lightIntensity);
  
     output.Normal = normal;
 	output.WorldPosition = worldPosition;
@@ -69,6 +73,9 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
  
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
+	float4 dColor = DiffuseColor;
+	if(isColor2)
+		dColor = DiffuseColor2;
     float3 light = normalize(DiffuseLightDirection);
     float3 normal = normalize(input.Normal);
     float3 r = normalize(2 * dot(light, normal) * normal - light);
@@ -82,7 +89,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	float3 L = -(float3(0, -1.0, 0));
 	float3 Id = float3(0.4, 0.4, 0.4);
 	float Kd = saturate(dot(L, normal));
-	float4 diffuse = float4(Kd * DiffuseColor.rgb * Id, DiffuseColor.a);
+	float4 diffuse = float4(Kd * dColor.rgb * Id, dColor.a);
 		
 	float4 finalColor = saturate(textureColor * (input.Color) + AmbientColor * AmbientIntensity + specular + diffuse);
 
