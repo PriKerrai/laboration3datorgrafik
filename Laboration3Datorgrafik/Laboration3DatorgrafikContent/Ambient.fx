@@ -9,13 +9,13 @@ float AmbientIntensity = 0.1;
 float4x4 WorldInverseTranspose;
 
 float3 DiffuseLightDirection = float3(3, 10, -20);
-float4 DiffuseColor = float4(0.5, 0, 0, 0);
+float4 DiffuseColor = float4(1, 1, 1, 1);
 float4 DiffuseColor2;
 bool isColor2;
 float DiffuseIntensity = 0.04;
 float3 DirectionalLightDirection;
 
-float Shininess = 400;
+float Shininess = 6000;
 float4 SpecularColor = float4(1, 1, 1, 1);    
 float SpecularIntensity = 1;
 float3 ViewVector;
