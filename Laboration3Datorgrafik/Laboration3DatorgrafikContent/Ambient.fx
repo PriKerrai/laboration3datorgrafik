@@ -1,4 +1,4 @@
-float4x4 World;
+﻿float4x4 World;
 float4x4 View;
 float4x4 Projection;
 float3 EyePosition;
@@ -11,6 +11,7 @@ float4x4 WorldInverseTranspose;
 float3 DiffuseLightDirection = float3(3, 10, -20);
 float4 DiffuseColor = float4(1, 1, 1, 1);
 float DiffuseIntensity = 0.04;
+float3 DirectionalLightDirection;
 
 float Shininess = 400;
 float4 SpecularColor = float4(1, 1, 1, 1);    
@@ -77,9 +78,13 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
     float4 specular = SpecularIntensity * SpecularColor * max(pow(dotProduct, Shininess), 0) * length(input.Color);
  
     float4 textureColor = tex2D(textureSampler, input.TextureCoordinate);
-    textureColor.a = 1;
- 
-	float4 finalColor = saturate(textureColor * (input.Color) + AmbientColor * AmbientIntensity + specular);
+    textureColor.a = 0;
+	float3 L = -(float3(0, -1.0, 0));
+	float3 Id = float3(0.4, 0.4, 0.4);
+	float Kd = saturate(dot(L, normal));
+	float4 diffuse = float4(Kd * DiffuseColor.rgb * Id, DiffuseColor.a);
+		
+	float4 finalColor = saturate(textureColor * (input.Color) + AmbientColor * AmbientIntensity + specular + diffuse);
 
 	if (FogEnabled)
 	{
