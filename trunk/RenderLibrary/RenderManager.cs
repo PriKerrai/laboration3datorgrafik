@@ -58,6 +58,10 @@ namespace RenderLibrary
                             effectAmbient.Parameters["NormalBumpMapEnabled"].SetValue(true);
                             effectAmbient.Parameters["NormalMap"].SetValue(bModels[i].bNormalMap);
                         }
+                        else if (bModels[i].bEnvironmentTextured)
+                        {
+
+                        }
                         else
                         {
                             effectAmbient.Parameters["NormalBumpMapEnabled"].SetValue(false);

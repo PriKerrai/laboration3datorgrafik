@@ -17,6 +17,14 @@ namespace Laboration3Datorgrafik
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        #region Constants
+        const int number_of_vertices = 8;
+        const int number_of_indices = 36;
+        const float rotation_factor = 0.01f;
+        const float translation_factor = 0.05f;
+        const float scale_factor = 1.01f;
+        #endregion
+
         SpriteBatch spriteBatch;
         GraphicsDeviceManager graphics;
         GraphicsDevice device;
@@ -24,13 +32,12 @@ namespace Laboration3Datorgrafik
         Floor floor;
         FlyingCamera fCamera;
         Effect effect, normalMapEffect;
-
         RenderManager renderManager;
-
         Vector3 jeepPosition = Vector3.Zero;
         Vector3 cameraPosition = new Vector3(0.0f, 50.0f, 5000.0f);
         float aspectRatio;
-
+        TextureCube sphereTextureCube;
+        Model sphereModel;
 
         public Game1()
         {
@@ -47,6 +54,9 @@ namespace Laboration3Datorgrafik
         /// </summary>
         protected override void Initialize()
         {
+            //this.IsFixedTimeStep = false;
+            //graphics.SynchronizeWithVerticalRetrace = false;
+
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
             graphics.IsFullScreen = false;
@@ -55,14 +65,6 @@ namespace Laboration3Datorgrafik
             this.camera = new Camera(GraphicsDevice, new Vector3(0, 0, -10));
             device = GraphicsDevice;
             renderManager = new RenderManager(Content, camera);
-
-            renderManager.AddBundleModel(new BundleModel(new Vector3(1, 0, 2), "Models\\jeep", 0.8f, Content.Load<Texture2D>("Models\\fbx\\jeep-1"), MathHelper.ToRadians(0)));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f, Content.Load<Texture2D>("Models\\fbx\\HelicopterTexture"), MathHelper.ToRadians(0)));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(-1, 3, 3), "Models\\BeachBall", 0.4f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture"), MathHelper.ToRadians(0)));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4")));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1, Content.Load<Texture2D>("Models\\fbx\\textures-obs-tower-knuq"), MathHelper.ToRadians(0)));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(4, 1.001f, -2), "Models\\snowplow", 0.7f));
-            floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 100, 100, new Vector3(0, 0, 0));
             
             base.Initialize();
         }
@@ -75,20 +77,126 @@ namespace Laboration3Datorgrafik
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
+            renderManager.AddBundleModel(new BundleModel(new Vector3(1, 0, 2), "Models\\jeep", 0.8f, Content.Load<Texture2D>("Models\\fbx\\jeep-1"), MathHelper.ToRadians(0)));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f, Content.Load<Texture2D>("Models\\fbx\\HelicopterTexture"), MathHelper.ToRadians(0)));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(-1, 3, 3), "Models\\BeachBall", 0.4f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture"), MathHelper.ToRadians(0)));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1, Content.Load<Texture2D>("Models\\fbx\\textures-obs-tower-knuq"), MathHelper.ToRadians(0)));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(4, 1.001f, -2), "Models\\snowplow", 0.7f));
+
+            floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 100, 100, new Vector3(0, 0, 0));
+
             effect = Content.Load<Effect>("Ambient");
-            
+
             effect.Parameters["FogEnabled"].SetValue(true);
             effect.Parameters["FogStart"].SetValue(15);
             effect.Parameters["FogEnd"].SetValue(30);
             effect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
 
+            // EnvironmentTextured
+            BundleModel sphereBundle = new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
+            sphereBundle.bEnvironmentTextured = true;
+            sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
+            renderManager.AddBundleModel(sphereBundle);
+
+            //Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, effect); // TODO: bModel = null ???
+            //sphereReflection.RemapModel(effect, sphereBundle.bModel);
+
             fCamera = new FlyingCamera();
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
             renderManager.Load();
-            // TODO: use this.Content to load your game content here
         }
+
+        #region Creating a basic VertexBuffer
+
+
+        VertexBuffer vertices;
+
+        void CreateCubeVertexBuffer()
+        {
+            Vector3[] cubeVertices = new Vector3[number_of_vertices];
+
+            cubeVertices[0] = new Vector3(-1, -1, -1);
+            cubeVertices[1] = new Vector3(-1, -1, 1);
+            cubeVertices[2] = new Vector3(1, -1, 1);
+            cubeVertices[3] = new Vector3(1, -1, -1);
+            cubeVertices[4] = new Vector3(-1, 1, -1);
+            cubeVertices[5] = new Vector3(-1, 1, 1);
+            cubeVertices[6] = new Vector3(1, 1, 1);
+            cubeVertices[7] = new Vector3(1, 1, -1);
+
+            VertexDeclaration VertexPositionDeclaration = new VertexDeclaration
+                (
+                    new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0)
+                );
+
+            vertices = new VertexBuffer(GraphicsDevice, VertexPositionDeclaration, number_of_vertices, BufferUsage.WriteOnly);
+            vertices.SetData<Vector3>(cubeVertices);
+        }
+        #endregion
+
+        #region Creating a basic IndexBuffer
+
+        IndexBuffer indices;
+
+        void CreateCubeIndexBuffer()
+        {
+            UInt16[] cubeIndices = new UInt16[number_of_indices];
+
+            //bottom face
+            cubeIndices[0] = 0;
+            cubeIndices[1] = 2;
+            cubeIndices[2] = 3;
+            cubeIndices[3] = 0;
+            cubeIndices[4] = 1;
+            cubeIndices[5] = 2;
+
+            //top face
+            cubeIndices[6] = 4;
+            cubeIndices[7] = 6;
+            cubeIndices[8] = 5;
+            cubeIndices[9] = 4;
+            cubeIndices[10] = 7;
+            cubeIndices[11] = 6;
+
+            //front face
+            cubeIndices[12] = 5;
+            cubeIndices[13] = 2;
+            cubeIndices[14] = 1;
+            cubeIndices[15] = 5;
+            cubeIndices[16] = 6;
+            cubeIndices[17] = 2;
+
+            //back face
+            cubeIndices[18] = 0;
+            cubeIndices[19] = 7;
+            cubeIndices[20] = 4;
+            cubeIndices[21] = 0;
+            cubeIndices[22] = 3;
+            cubeIndices[23] = 7;
+
+            //left face
+            cubeIndices[24] = 0;
+            cubeIndices[25] = 4;
+            cubeIndices[26] = 1;
+            cubeIndices[27] = 1;
+            cubeIndices[28] = 4;
+            cubeIndices[29] = 5;
+
+            //right face
+            cubeIndices[30] = 2;
+            cubeIndices[31] = 6;
+            cubeIndices[32] = 3;
+            cubeIndices[33] = 3;
+            cubeIndices[34] = 6;
+            cubeIndices[35] = 7;
+
+            indices = new IndexBuffer(GraphicsDevice, IndexElementSize.SixteenBits, number_of_indices, BufferUsage.WriteOnly);
+            indices.SetData<UInt16>(cubeIndices);
+
+        }
+        #endregion
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload

@@ -243,6 +243,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\leather.png">
+      <Name>leather</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Models\instrument_panel.png">
       <Name>instrument_panel</Name>
       <Importer>TextureImporter</Importer>
