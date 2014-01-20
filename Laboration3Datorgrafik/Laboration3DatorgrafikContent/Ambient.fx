@@ -35,6 +35,19 @@ sampler2D bumpSampler = sampler_state {
     AddressU = Wrap;
     AddressV = Wrap;
 };
+
+// EnvironmentTexture
+uniform const bool EnvironmentTextureEnabled = false;
+uniform const Texture CubeMap;
+samplerCUBE CubeMapSampler = sampler_state
+{
+	texture = <CubeMap>;
+	magfilter = LINEAR;
+	minfilter = LINEAR;
+	mipfilter = LINEAR;
+	AddressU = Mirror;
+	AddressV = Mirror;
+};
  
 //Fog settings
 uniform const bool FogEnabled;
@@ -98,6 +111,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
     float3 r = normalize(2 * dot(light, n) * n - light);
     float3 v = normalize(mul(normalize(ViewVector), World));
     float dotProduct = dot(r, v);
+	float3 e = normalize(ViewVector.xyz - input.WorldPosition.xyz); // EnvironmentTexture
  
     float4 specular = SpecularIntensity * SpecularColor * max(pow(dotProduct, Shininess), 0) * diffuseIntensity;
  
@@ -105,6 +119,13 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
     textureColor.a = 1;
 	
 	float4 finalColor = saturate(textureColor * (diffuseIntensity) + AmbientColor * AmbientIntensity + specular);
+
+	// EnvironmentTexture
+	if (EnvironmentTextureEnabled)
+	{
+		float3 cubeCoord = normalize(reflect(-e, n));
+		finalColor = (texCUBE(CubeMapSampler, cubeCoord) * 0.7) + (finalColor * 0.3);
+	}
 
 	if (FogEnabled)
 	{
