@@ -33,8 +33,6 @@ namespace RenderLibrary
             nearPlaneDistance = 1f;
             farPlaneDistance = 200f;
 
-            //startingPosition = new Vector3(500,100000,10);
-
             this.WorldMatrix = Matrix.CreateTranslation(0, 0, 0);
             this.ViewMatrix = Matrix.CreateLookAt(this.CameraPos, new Vector3(0, 0, 1), Vector3.Up);
             this.ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(
