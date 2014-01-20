@@ -14,7 +14,7 @@ namespace RenderLibrary
         public Vector3 bPosition { get; set; }
         public string bModelPath { get; set; }
         public float bScale { get; set; }
-        public Texture2D bTexturePath { get; set; }
+        public Texture2D bTexture { get; set; }
         public Texture2D bNormalMap {get; set; }
         public float bRotation { get; set; }
 
@@ -38,7 +38,7 @@ namespace RenderLibrary
             this.bPosition = position;
             this.bModelPath = modelPath;
             this.bScale = scale;
-            this.bTexturePath = tPath;
+            this.bTexture = tPath;
             this.bRotation = radians;
         }
 
@@ -47,7 +47,7 @@ namespace RenderLibrary
             this.bPosition = position;
             this.bModelPath = modelPath;
             this.bScale = scale;
-            this.bTexturePath = texture;
+            this.bTexture = texture;
             this.bNormalMap = normalMap;
         }
         public void GetTextures(Effect effectAmbient)
@@ -59,13 +59,11 @@ namespace RenderLibrary
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
                         Texture2D texture = ((BasicEffect)part.Effect).Texture;
-                        Vector3 diffuse = ((BasicEffect)part.Effect).DiffuseColor;
                         part.Effect = effectAmbient.Clone();
-
                         
                         part.Effect.Parameters["ModelTexture"].SetValue(texture);
-                        part.Effect.Parameters["isColor2"].SetValue(true);
-                        part.Effect.Parameters["DiffuseColor2"].SetValue(new Vector4(diffuse, 0.0f));
+                        //part.Effect.Parameters["isColor2"].SetValue(true);
+                        
                     }
                 }
             }

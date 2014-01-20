@@ -21,7 +21,6 @@ namespace RenderLibrary
         {
             Content = content;
             this.camera = camera;
-            effectNormalMap = Content.Load<Effect>("effects");
             effectAmbient = Content.Load<Effect>("Ambient");
         }
 
@@ -35,7 +34,7 @@ namespace RenderLibrary
             for (int i = 0; i < bModels.Count; i++)
             {
                 bModels[i].bModel = Content.Load<Model>(bModels[i].bModelPath);
-                if (bModels[i].bTexturePath == null)
+                if (bModels[i].bTexture == null)
                     bModels[i].GetTextures(this.effectAmbient);
 
             }
@@ -49,37 +48,29 @@ namespace RenderLibrary
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
+                        part.Effect = effectAmbient;
+                        effectAmbient.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateRotationY(bModels[i].bRotation) * Matrix.CreateTranslation(bModels[i].bPosition));
+                        effectAmbient.Parameters["View"].SetValue(camera.ViewMatrix);
+                        effectAmbient.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+                        effectAmbient.Parameters["ViewVector"].SetValue(camera.Position);
+                        effectAmbient.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
+                        
                         if (bModels[i].bNormalMap != null)
                         {
-
-                            part.Effect = effectNormalMap;
-                            effectNormalMap.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateRotationY(bModels[i].bRotation) * Matrix.CreateTranslation(bModels[i].bPosition));
-                            effectNormalMap.Parameters["View"].SetValue(camera.ViewMatrix);
-                            effectNormalMap.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                            effectNormalMap.Parameters["ViewVector"].SetValue(camera.Position);
-                            effectNormalMap.Parameters["ModelTexture"].SetValue(bModels[i].bTexturePath);
-                            effectNormalMap.Parameters["NormalMap"].SetValue(bModels[i].bNormalMap);
-                            
-                            Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
-                            effectNormalMap.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
+                            effectAmbient.Parameters["NormalBumpMapEnabled"].SetValue(true);
+                            effectAmbient.Parameters["NormalMap"].SetValue(bModels[i].bNormalMap);
                         }
                         else
                         {
-                            part.Effect = effectAmbient;
-                            effectAmbient.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateRotationY(bModels[i].bRotation) * Matrix.CreateTranslation(bModels[i].bPosition));
-                            effectAmbient.Parameters["View"].SetValue(camera.ViewMatrix);
-                            effectAmbient.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                            effectAmbient.Parameters["ViewVector"].SetValue(camera.Position);
-                            effectAmbient.Parameters["ModelTexture"].SetValue(bModels[i].bTexturePath);
-                            Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
-                            effectAmbient.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
+                            effectAmbient.Parameters["NormalBumpMapEnabled"].SetValue(false);
                         }
-                        
+
+                        Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
+                        effectAmbient.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
                     }
                     mesh.Draw();
                 }
             }
         }
-
     }
 }

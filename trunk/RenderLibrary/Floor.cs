@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Laboration3Datorgrafik;
 
 
 namespace RenderLibrary
@@ -25,56 +26,68 @@ namespace RenderLibrary
             _normalMap = normalMap;
             _position = position;
 
-            VertexPositionNormalTexture[] verticeData = new VertexPositionNormalTexture[width * height * 6];
+            VertexPositionNormalTextureTangentBinormal[] verticeData = new VertexPositionNormalTextureTangentBinormal[width * height * 6];
             ushort index = 0;
 
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    verticeData[index] = new VertexPositionNormalTexture();
+                    verticeData[index] = new VertexPositionNormalTextureTangentBinormal();
                     verticeData[index].Position = new Vector3(x, 0, y);
                     verticeData[index].TextureCoordinate = new Vector2(0, 0);
                     verticeData[index].Normal = Vector3.Up;
+                    verticeData[index].Tangent = Vector3.Forward;
+                    verticeData[index].Binormal = Vector3.Cross(Vector3.Up, Vector3.Forward);
                     index++;
 
-                    verticeData[index] = new VertexPositionNormalTexture();
+                    verticeData[index] = new VertexPositionNormalTextureTangentBinormal();
                     verticeData[index].Position = new Vector3(x + 1, 0, y);
                     verticeData[index].TextureCoordinate = new Vector2(1, 0);
                     verticeData[index].Normal = Vector3.Up;
+                    verticeData[index].Tangent = Vector3.Forward;
+                    verticeData[index].Binormal = Vector3.Cross(Vector3.Up, Vector3.Forward);
                     index++;
 
-                    verticeData[index] = new VertexPositionNormalTexture();
+                    verticeData[index] = new VertexPositionNormalTextureTangentBinormal();
                     verticeData[index].Position = new Vector3(x, 0, y + 1);
                     verticeData[index].TextureCoordinate = new Vector2(0, 1);
                     verticeData[index].Normal = Vector3.Up;
+                    verticeData[index].Tangent = Vector3.Forward;
+                    verticeData[index].Binormal = Vector3.Cross(Vector3.Up, Vector3.Forward);
                     index++;
 
                     _primitiveCount++;
 
-                    verticeData[index] = new VertexPositionNormalTexture();
+                    verticeData[index] = new VertexPositionNormalTextureTangentBinormal();
                     verticeData[index].Position = new Vector3(x, 0, y + 1);
                     verticeData[index].TextureCoordinate = new Vector2(0, 1);
                     verticeData[index].Normal = Vector3.Up;
+                    verticeData[index].Tangent = Vector3.Forward;
+                    verticeData[index].Binormal = Vector3.Cross(Vector3.Up, Vector3.Forward);
                     index++;
 
-                    verticeData[index] = new VertexPositionNormalTexture();
+                    verticeData[index] = new VertexPositionNormalTextureTangentBinormal();
                     verticeData[index].Position = new Vector3(x + 1, 0, y);
                     verticeData[index].TextureCoordinate = new Vector2(1, 0);
                     verticeData[index].Normal = Vector3.Up;
+                    verticeData[index].Tangent = Vector3.Forward;
+                    verticeData[index].Binormal = Vector3.Cross(Vector3.Up, Vector3.Forward);
                     index++;
 
-                    verticeData[index] = new VertexPositionNormalTexture();
+                    verticeData[index] = new VertexPositionNormalTextureTangentBinormal();
                     verticeData[index].Position = new Vector3(x + 1, 0, y + 1);
                     verticeData[index].TextureCoordinate = new Vector2(1, 1);
                     verticeData[index].Normal = Vector3.Up;
+                    verticeData[index].Tangent = Vector3.Forward;
+                    verticeData[index].Binormal = Vector3.Cross(Vector3.Up, Vector3.Forward);
                     index++;
 
                     _primitiveCount++;
                 }
             }
 
-            _vertexBuffer = new VertexBuffer(graphics, typeof(VertexPositionNormalTexture), verticeData.Length, BufferUsage.WriteOnly);
+            _vertexBuffer = new VertexBuffer(graphics, typeof(VertexPositionNormalTextureTangentBinormal), verticeData.Length, BufferUsage.WriteOnly);
             _vertexBuffer.SetData(verticeData);
         }
 
@@ -86,7 +99,8 @@ namespace RenderLibrary
             effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
             effect.Parameters["ViewVector"].SetValue(camera.Position);
             effect.Parameters["ModelTexture"].SetValue(_texture);
-            //effect.Parameters["NormalMap"].SetValue(_normalMap);
+            effect.Parameters["NormalMap"].SetValue(_normalMap);
+            effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
             graphics.SetVertexBuffer(_vertexBuffer);
 
             effect.CurrentTechnique.Passes[0].Apply();

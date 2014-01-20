@@ -59,15 +59,13 @@ namespace Laboration3Datorgrafik
             this.camera = new Camera(GraphicsDevice, new Vector3(0, 0, -10));
             device = GraphicsDevice;
             renderManager = new RenderManager(Content, camera);
-            List<Texture2D> jeepTexturePaths = new List<Texture2D>();
-            List<Texture2D> hangarTexturePaths = new List<Texture2D>();
 
             renderManager.AddBundleModel(new BundleModel(new Vector3(1, 0, 2), "Models\\jeep", 0.8f, Content.Load<Texture2D>("Models\\fbx\\jeep-1"), MathHelper.ToRadians(0)));
             renderManager.AddBundleModel(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f, Content.Load<Texture2D>("Models\\fbx\\HelicopterTexture"), MathHelper.ToRadians(0)));
             renderManager.AddBundleModel(new BundleModel(new Vector3(-1, 3, 3), "Models\\BeachBall", 0.4f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture"), MathHelper.ToRadians(0)));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture"), Content.Load<Texture2D>("Models\\normal_4")));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4")));
             renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1, Content.Load<Texture2D>("Models\\fbx\\textures-obs-tower-knuq"), MathHelper.ToRadians(0)));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(4, 1.6f, -2), "Models\\snowplow", 0.7f));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(4, 1.001f, -2), "Models\\snowplow", 0.7f));
             floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 100, 100, new Vector3(0, 0, 0));
             
             base.Initialize();
