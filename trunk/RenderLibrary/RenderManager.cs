@@ -14,8 +14,7 @@ namespace RenderLibrary
         private List<BundleModel> bModels = new List<BundleModel>();
         private ContentManager Content;
         private Camera camera;
-        Effect effectNormalMap,
-               effectAmbient;
+        Effect effectAmbient;
 
         public RenderManager(ContentManager content, Camera camera) 
         {
@@ -23,7 +22,6 @@ namespace RenderLibrary
             this.camera = camera;
             effectAmbient = Content.Load<Effect>("Ambient");
         }
-
 
         public void AddBundleModel(BundleModel bModel)
         {

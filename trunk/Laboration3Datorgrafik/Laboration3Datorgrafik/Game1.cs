@@ -21,12 +21,8 @@ namespace Laboration3Datorgrafik
         GraphicsDeviceManager graphics;
         GraphicsDevice device;
         Camera camera;
-
         Floor floor;
-
-
         FlyingCamera fCamera;
-
         Effect effect, normalMapEffect;
 
         RenderManager renderManager;
@@ -81,17 +77,11 @@ namespace Laboration3Datorgrafik
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
             effect = Content.Load<Effect>("Ambient");
-            normalMapEffect = Content.Load<Effect>("effects");
-
+            
             effect.Parameters["FogEnabled"].SetValue(true);
             effect.Parameters["FogStart"].SetValue(15);
             effect.Parameters["FogEnd"].SetValue(30);
             effect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
-
-            normalMapEffect.Parameters["FogEnabled"].SetValue(true);
-            normalMapEffect.Parameters["FogStart"].SetValue(15);
-            normalMapEffect.Parameters["FogEnd"].SetValue(30);
-            normalMapEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
 
             fCamera = new FlyingCamera();
 
