@@ -95,7 +95,6 @@ namespace RenderLibrary
             _cubeMap = cube;
 
             graphics.SetRenderTarget(null);
-            //renderManager.SetViewAndProjection();
             MirrorTextures();
         }
 
