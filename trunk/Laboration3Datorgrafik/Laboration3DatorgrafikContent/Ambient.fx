@@ -6,9 +6,12 @@ float4 AmbientColor = float4(1, 1, 1, 1);
 float AmbientIntensity = 0.1;
 
 float4x4 WorldInverseTranspose;
+float Alpha = 1;
 
 float3 DiffuseLightDirection = float3(3, 10, -20);
-float4 DiffuseColor = float4(1, 1, 1, 1);
+float4 DiffuseColor;
+float4 DiffuseColor2;
+bool isColor2;
 float DiffuseIntensity = 0.04;
 
 float Shininess = 400;
@@ -117,8 +120,12 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
  
     float4 textureColor = tex2D(textureSampler, input.TextureCoordinate);
     textureColor.a = 1;
-	
-	float4 finalColor = saturate(textureColor * (diffuseIntensity) + AmbientColor * AmbientIntensity + specular);
+	float3 L = -(float3(0, -1.0, 0));
+	float3 Id = float3(0.4, 0.4, 0.4);
+	float Kd = saturate(dot(L, normal));
+	float4 diffuse = float4(Kd * dColor.rgb * Id, dColor.a);
+		//(diffuseIntensity)
+	float4 finalColor = saturate(textureColor * (input.Color) + AmbientColor * AmbientIntensity + specular + diffuse);
 
 	// EnvironmentTexture
 	if (EnvironmentTextureEnabled)
@@ -132,7 +139,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 		float fogPower = saturate((length(ViewVector - input.WorldPosition) - FogStart) / (FogEnd - FogStart));
 		finalColor.rgba = lerp(finalColor.rgba, float4(FogColor, 1), fogPower);
 	}
-
+	finalColor.a = Alpha;
     return finalColor;
 }
  
@@ -140,6 +147,9 @@ technique Textured
 {
     pass Pass1
     {
+		AlphaBlendEnable = TRUE;
+        DestBlend = INVSRCALPHA;
+        SrcBlend = SRCALPHA;
         VertexShader = compile vs_3_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 PixelShaderFunction();
     }

@@ -16,6 +16,7 @@ float4 SpecularColor = float4(1, 1, 1, 1);
 float SpecularIntensity = 1;
 float3 ViewVector = float3(1, 0, 0);
 
+
 //Fog settings
 uniform const bool FogEnabled;
 uniform const float FogStart;
