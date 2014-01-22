@@ -36,20 +36,28 @@ namespace RenderLibrary
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
-                        Vector3 diffuse = ((BasicEffect)part.Effect).DiffuseColor;
-                        Vector3 specularColor = ((BasicEffect)part.Effect).SpecularColor;
-                        float specularPower = ((BasicEffect)part.Effect).SpecularPower;
-                        Texture2D texture = ((BasicEffect)part.Effect).Texture;
-                        float alpha = ((BasicEffect)part.Effect).Alpha;
+                        //Vector3 diffuse = ((BasicEffect)part.Effect).DiffuseColor;
+                        //Vector3 specularColor = ((BasicEffect)part.Effect).SpecularColor;
+                        //float specularPower = ((BasicEffect)part.Effect).SpecularPower;
+                        //Texture2D texture = ((BasicEffect)part.Effect).Texture;
+                        //float alpha = ((BasicEffect)part.Effect).Alpha;
+
+                        //part.Effect = effect.Clone();
+
+                        //part.Effect.Parameters["Alpha"].SetValue(alpha);
+                        //part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(diffuse, 0.0f));
+                        //part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
+                        //part.Effect.Parameters["SpecularPower"].SetValue(specularPower);
+                        //part.Effect.Parameters["ModelTexture"].SetValue(texture);
+                        //effect.Parameters["NormalTextureEnabled"].SetValue(false);
 
                         part.Effect = effect.Clone();
 
-                        part.Effect.Parameters["Alpha"].SetValue(alpha);
-                        part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(diffuse, 0.0f));
-                        part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
-                        part.Effect.Parameters["SpecularPower"].SetValue(specularPower);
-                        part.Effect.Parameters["ModelTexture"].SetValue(texture);
-                        effect.Parameters["NormalTextureEnabled"].SetValue(false);
+                        part.Effect.Parameters["Alpha"].SetValue(1);
+                        part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(new Vector3(0.8f, 0.8f, 0.8f), 0.0f));
+                        part.Effect.Parameters["SpecularColor"].SetValue(new Vector4(0f, 0f, 0f, 0f));                        part.Effect.Parameters["Shininess"].SetValue(16);
+                        //part.Effect.Parameters["ModelTexture"].SetValue(new Texture2D());
+                        //effect.Parameters["NormalTextureEnabled"].SetValue(false);
                     }
                 }
             }

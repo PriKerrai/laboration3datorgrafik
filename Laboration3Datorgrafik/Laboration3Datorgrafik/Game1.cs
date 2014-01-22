@@ -99,13 +99,14 @@ namespace Laboration3Datorgrafik
             sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
             renderManager.AddBundleModel(sphereBundle);
 
-            //Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, effect); // TODO: bModel = null ???
-            //sphereReflection.RemapModel(effect, sphereBundle.bModel);
+            renderManager.Load();
+
+            Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, effect); // TODO: bModel = null ???
+            sphereReflection.RemapModel(effect, sphereBundle.bModel);
 
             fCamera = new FlyingCamera();
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
-            renderManager.Load();
         }
 
         #region Creating a basic VertexBuffer
