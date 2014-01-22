@@ -27,6 +27,7 @@ namespace RenderLibrary
         {
             bModels.Add(bModel);
         }
+
         public void Load() 
         {
             for (int i = 0; i < bModels.Count; i++)
@@ -48,31 +49,34 @@ namespace RenderLibrary
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
                         //part.Effect = effectAmbient;
-						if (bModels[i].bTexturePath != null)
+						if (bModels[i].bTexture != null)
                             {
                                 
                                 part.Effect = effectAmbient.Clone();
                                  part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(1, 1, 1, 1));
-                                 part.Effect.Parameters["ModelTexture"].SetValue(bModels[i].bTexturePath);
+                                 part.Effect.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
                             }
                         effectAmbient.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateRotationY(bModels[i].bRotation) * Matrix.CreateTranslation(bModels[i].bPosition));
                         effectAmbient.Parameters["View"].SetValue(camera.ViewMatrix);
                         effectAmbient.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                         effectAmbient.Parameters["ViewVector"].SetValue(camera.Position);
                         effectAmbient.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
-                        
-                        if (bModels[i].bNormalMap != null)
+
+                        if (bModels[i].bNormalMap != null && bModels[i].bEnvironmentTextured == false)
                         {
                             effectAmbient.Parameters["NormalBumpMapEnabled"].SetValue(true);
+                            effectAmbient.Parameters["EnvironmentTextureEnabled"].SetValue(false);
                             effectAmbient.Parameters["NormalMap"].SetValue(bModels[i].bNormalMap);
                         }
                         else if (bModels[i].bEnvironmentTextured)
                         {
-
+                            effectAmbient.Parameters["NormalBumpMapEnabled"].SetValue(true);
+                            effectAmbient.Parameters["EnvironmentTextureEnabled"].SetValue(true);
                         }
                         else
                         {
                             effectAmbient.Parameters["NormalBumpMapEnabled"].SetValue(false);
+                            effectAmbient.Parameters["EnvironmentTextureEnabled"].SetValue(false);
                         }
 
                         Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
