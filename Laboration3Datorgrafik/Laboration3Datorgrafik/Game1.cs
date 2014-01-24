@@ -82,7 +82,7 @@ namespace Laboration3Datorgrafik
             renderManager.AddBundleModel(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f, Content.Load<Texture2D>("Models\\fbx\\HelicopterTexture"), MathHelper.ToRadians(0)));
             renderManager.AddBundleModel(new BundleModel(new Vector3(-1, 3, 3), "Models\\BeachBall", 0.4f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture"), MathHelper.ToRadians(0)));
             renderManager.AddBundleModel(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1, Content.Load<Texture2D>("Models\\fbx\\textures-obs-tower-knuq"), MathHelper.ToRadians(0)));
-            renderManager.AddBundleModel(new BundleModel(new Vector3(4, 1.001f, -2), "Models\\snowplow", 0.7f));
+            renderManager.AddBundleModel(new BundleModel(new Vector3(1, 1.001f, 1), "Models\\snowplow", 0.7f));
 
             floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 100, 100, new Vector3(0, 0, 0));
 
@@ -94,15 +94,15 @@ namespace Laboration3Datorgrafik
             effect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
 
             // EnvironmentTextured
-            BundleModel sphereBundle = new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
-            sphereBundle.bEnvironmentTextured = true;
-            sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
-            renderManager.AddBundleModel(sphereBundle);
+            //BundleModel sphereBundle = new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
+            //sphereBundle.bEnvironmentTextured = true;
+            //sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
+            //renderManager.AddBundleModel(sphereBundle);
 
             renderManager.Load();
 
-            Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, effect); // TODO: bModel = null ???
-            sphereReflection.RemapModel(effect, sphereBundle.bModel);
+            //Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, effect); // TODO: bModel = null ???
+            //sphereReflection.RemapModel(effect, sphereBundle.bModel);
 
             fCamera = new FlyingCamera();
 
