@@ -125,6 +125,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	float Kd = saturate(dot(L, normal));
 	float4 diffuse = float4(Kd * dColor.rgb * Id, dColor.a);
 		//(diffuseIntensity)
+	//float4 finalColor = saturate(textureColor * (input.Color) + AmbientColor * AmbientIntensity + specular + diffuse);
 	float4 finalColor = saturate(textureColor * diffuseIntensity + AmbientColor * AmbientIntensity + specular + diffuse);
 
 	// EnvironmentTexture
