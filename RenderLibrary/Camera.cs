@@ -10,7 +10,7 @@ namespace RenderLibrary
     public class Camera
     {
         private GraphicsDevice device;
-        public Vector3 viewVector { get; set; }
+        public Vector3 EyePosition { get; set; }
 
         public Matrix ViewMatrix { get; set; }
         public Matrix ProjectionMatrix { get; set; }
@@ -53,8 +53,8 @@ namespace RenderLibrary
             this.Position = campos;
             this.UpDirection = camup;
 
-            viewVector = Vector3.Transform(pos - this.Position, Matrix.CreateRotationY(0));
-            viewVector.Normalize();
+            EyePosition = Vector3.Transform(pos - this.Position, Matrix.CreateRotationY(0));
+            EyePosition.Normalize();
 
             this.ViewMatrix = Matrix.CreateLookAt(this.Position, pos, this.UpDirection);
             this.ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(

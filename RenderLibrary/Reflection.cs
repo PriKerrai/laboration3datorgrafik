@@ -55,7 +55,8 @@ namespace RenderLibrary
 
                         part.Effect.Parameters["Alpha"].SetValue(1);
                         part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(new Vector3(0.8f, 0.8f, 0.8f), 0.0f));
-                        part.Effect.Parameters["SpecularColor"].SetValue(new Vector4(0f, 0f, 0f, 0f));                        part.Effect.Parameters["Shininess"].SetValue(16);
+                        part.Effect.Parameters["SpecularColor"].SetValue(new Vector4(0f, 0f, 0f, 0f));                        
+                        part.Effect.Parameters["Shininess"].SetValue(16);
                         //part.Effect.Parameters["ModelTexture"].SetValue(new Texture2D());
                         //effect.Parameters["NormalTextureEnabled"].SetValue(false);
                     }
@@ -68,7 +69,7 @@ namespace RenderLibrary
             RenderTargetCube cube = new RenderTargetCube(graphics, 1024, true, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
 
             effect.Parameters["Projection"].SetValue(Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, 1, 1f, 50f));
-            effect.Parameters["ViewVector"].SetValue(position);
+            effect.Parameters["EyePosition"].SetValue(position);
 
             graphics.SetRenderTarget(cube, CubeMapFace.PositiveZ);
             graphics.Clear(Color.Gray);
