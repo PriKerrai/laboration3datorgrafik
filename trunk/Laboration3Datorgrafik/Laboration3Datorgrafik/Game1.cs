@@ -31,7 +31,7 @@ namespace Laboration3Datorgrafik
         Camera camera;
         Floor floor;
         FlyingCamera fCamera;
-        Effect effect, normalMapEffect;
+        Effect customEffect;
         RenderManager renderManager;
         Vector3 jeepPosition = Vector3.Zero;
         Vector3 cameraPosition = new Vector3(0.0f, 50.0f, 5000.0f);
@@ -86,12 +86,18 @@ namespace Laboration3Datorgrafik
 
             floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 100, 100, new Vector3(0, 0, 0));
 
-            effect = Content.Load<Effect>("Ambient");
+            customEffect = Content.Load<Effect>("customEffect");
 
-            effect.Parameters["FogEnabled"].SetValue(true);
-            effect.Parameters["FogStart"].SetValue(15);
-            effect.Parameters["FogEnd"].SetValue(30);
-            effect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
+            customEffect.Parameters["AmbientLightIntensity"].SetValue(new Vector3(0.4f, 0.4f, 0.4f));
+            customEffect.Parameters["DirectLightDirection"].SetValue(Vector3.Down);
+            customEffect.Parameters["DirectLightDiffuseIntensity"].SetValue(new Vector3(0.6f, 0.6f, 0.6f));
+            customEffect.Parameters["DirectLightSpecularIntensity"].SetValue(new Vector3(0.8f, 0.8f, 0.8f));
+            
+            customEffect.Parameters["Alpha"].SetValue(1);
+            customEffect.Parameters["FogEnabled"].SetValue(true);
+            customEffect.Parameters["FogStart"].SetValue(15);
+            customEffect.Parameters["FogEnd"].SetValue(30);
+            customEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
 
             // EnvironmentTextured
             //BundleModel sphereBundle = new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
@@ -101,8 +107,8 @@ namespace Laboration3Datorgrafik
 
             renderManager.Load();
 
-            //Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, effect); // TODO: bModel = null ???
-            //sphereReflection.RemapModel(effect, sphereBundle.bModel);
+            //Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, customEffect); // TODO: bModel = null ???
+            //sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
 
             fCamera = new FlyingCamera();
 
@@ -235,7 +241,7 @@ namespace Laboration3Datorgrafik
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkGray, 1.0f, 0);
 
-            floor.Draw(graphics.GraphicsDevice, effect, camera);
+            floor.Draw(graphics.GraphicsDevice, customEffect, camera);
             renderManager.Draw();
             base.Draw(gameTime);
         }

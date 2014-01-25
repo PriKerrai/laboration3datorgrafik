@@ -97,16 +97,13 @@ namespace RenderLibrary
             effect.Parameters["World"].SetValue(camera.WorldMatrix * Matrix.CreateScale(1) * Matrix.CreateTranslation(new Vector3(-25, 0, -25)));
             effect.Parameters["View"].SetValue(camera.ViewMatrix);
             effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-            effect.Parameters["ViewVector"].SetValue(camera.Position);
+            effect.Parameters["EyePosition"].SetValue(camera.Position);
             effect.Parameters["ModelTexture"].SetValue(_texture);
             effect.Parameters["NormalMap"].SetValue(_normalMap);
             effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
             graphics.SetVertexBuffer(_vertexBuffer);
 
             effect.CurrentTechnique.Passes[0].Apply();
-
-            Matrix worldInverseTransposeMatrix = Matrix.Transpose(camera.WorldMatrix);
-            effect.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
 
             graphics.DrawPrimitives(PrimitiveType.TriangleList, 0, _primitiveCount);
         }

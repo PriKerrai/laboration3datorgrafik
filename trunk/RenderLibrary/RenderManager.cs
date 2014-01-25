@@ -14,13 +14,13 @@ namespace RenderLibrary
         private List<BundleModel> bModels = new List<BundleModel>();
         private ContentManager Content;
         private Camera camera;
-        Effect effectAmbient;
+        Effect customEffect;
 
         public RenderManager(ContentManager content, Camera camera) 
         {
             Content = content;
             this.camera = camera;
-            effectAmbient = Content.Load<Effect>("Ambient");
+            customEffect = Content.Load<Effect>("customEffect");
         }
 
         public void AddBundleModel(BundleModel bModel)
@@ -34,7 +34,7 @@ namespace RenderLibrary
             {
                 bModels[i].bModel = Content.Load<Model>(bModels[i].bModelPath);
                // if (bModels[i].bTexture == null)
-                    bModels[i].GetTextures(this.effectAmbient);
+                bModels[i].GetTextures(this.customEffect);
 
             }
         }
@@ -50,19 +50,19 @@ namespace RenderLibrary
                 //    foreach (ModelMeshPart part in mesh.MeshParts)
                 //    {
 
-                //      //  part.Effect = effectAmbient.Clone();
+                //      //  part.Effect = customEffect.Clone();
                 //        //if (bModels[i].bTexture != null)
                 //        //{
 
-                //        //    part.Effect = effectAmbient.Clone();
+                //        //    part.Effect = customEffect.Clone();
                 //        //    part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(1, 1, 1, 1));
                 //        //    part.Effect.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
                 //        //}
 
-                //        //part.Effect = effectAmbient;
+                //        //part.Effect = customEffect;
                 //        //if (bModels[i].bTexture != null)
                 //        //{
-                //        //    part.Effect = effectAmbient.Clone();
+                //        //    part.Effect = customEffect.Clone();
                 //        //    part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(1, 1, 1, 1));
                 //        //    part.Effect.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
                 //        //}
@@ -70,7 +70,7 @@ namespace RenderLibrary
                 //        part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bModels[i].bScale) * Matrix.CreateRotationY(bModels[i].bRotation) * Matrix.CreateTranslation(bModels[i].bPosition));
                 //        part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
                 //        part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                //        part.Effect.Parameters["ViewVector"].SetValue(camera.Position);
+                //        part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
                 //       // part.Effect.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
 
                 //        if (bModels[i].bNormalMap != null && !bModels[i].bEnvironmentTextured)
@@ -91,11 +91,11 @@ namespace RenderLibrary
                 //        }
 
                 //        Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
-                //        effectAmbient.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
+                //        customEffect.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
                 //    }
                 //    mesh.Draw();
                 //}
-                // effectAmbient.Parameters["DiffuseColor"].SetValue(new Vector4(1f, 1f, 1f, 1f));
+                // customEffect.Parameters["DiffuseColor"].SetValue(new Vector4(1f, 1f, 1f, 1f));
             }
         }
     }

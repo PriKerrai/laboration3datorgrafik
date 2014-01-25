@@ -65,19 +65,19 @@ namespace RenderLibrary
                 foreach (Effect meshEffect in mesh.Effects)
                 {
 
-                    //  part.Effect = effectAmbient.Clone();
+                    //  part.Effect = customEffect.Clone();
                     //if (bModels[i].bTexture != null)
                     //{
 
-                    //    part.Effect = effectAmbient.Clone();
+                    //    part.Effect = customEffect.Clone();
                     //    part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(1, 1, 1, 1));
                     //    part.Effect.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
                     //}
 
-                    //part.Effect = effectAmbient;
+                    //part.Effect = customEffect;
                     //if (bModels[i].bTexture != null)
                     //{
-                    //    part.Effect = effectAmbient.Clone();
+                    //    part.Effect = customEffect.Clone();
                     //    part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(1, 1, 1, 1));
                     //    part.Effect.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
                     //}
@@ -85,7 +85,7 @@ namespace RenderLibrary
                     meshEffect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
                     meshEffect.Parameters["View"].SetValue(camera.ViewMatrix);
                     meshEffect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                    meshEffect.Parameters["ViewVector"].SetValue(camera.Position);
+                    meshEffect.Parameters["EyePosition"].SetValue(camera.Position);
                     // part.Effect.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
 
                     if (bNormalMap != null && !bEnvironmentTextured)
@@ -104,14 +104,11 @@ namespace RenderLibrary
                         meshEffect.Parameters["NormalBumpMapEnabled"].SetValue(false);
                         meshEffect.Parameters["EnvironmentTextureEnabled"].SetValue(false);
                     }
-
-                    Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * camera.WorldMatrix));
-                    meshEffect.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
                 }
                 mesh.Draw();
             }
         }
-        public void GetTextures(Effect effectAmbient)
+        public void GetTextures(Effect customEffect)
         {
             if (bModel != null)
             {
@@ -120,24 +117,20 @@ namespace RenderLibrary
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
 
-                        //Texture2D texture = ((BasicEffect)part.Effect).Texture;
+                        Texture2D texture = ((BasicEffect)part.Effect).Texture;
                         float alpha = ((BasicEffect)part.Effect).Alpha;
                         Vector3 diffuseColor = ((BasicEffect)part.Effect).DiffuseColor;
+                        Vector3 specularColor = ((BasicEffect)part.Effect).SpecularColor;
+                        float SpecularIntensity = ((BasicEffect)part.Effect).SpecularPower;
 
-                        part.Effect = effectAmbient.Clone();
+                        part.Effect = customEffect.Clone();
 
                         part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(diffuseColor, 0));
                         part.Effect.Parameters["Alpha"].SetValue(alpha);
                         part.Effect.Parameters["ModelTexture"].SetValue(bTexture);
-                        //if (bTexture != null)
-                        //{
-                        //    
-                        //}
-                        //else
-                        //{
-                        //    part.Effect.Parameters["ModelTexture"].SetValue(texture);
-                        //}
-                        
+                        part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
+                        part.Effect.Parameters["SpecularIntensity"].SetValue(SpecularIntensity);
+                                                
                     }
                 }
             }
