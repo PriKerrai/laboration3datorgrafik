@@ -42,6 +42,11 @@ namespace RenderLibrary
                //     bModels[i].SetEffect(this.customEffect);
 
             }
+            for (int i = 0; i < bModelsWithSpecialEffect.Count; i++)
+            {
+                bModelsWithSpecialEffect[i].bModel = Content.Load<Model>(bModelsWithSpecialEffect[i].bModelPath);
+                bModelsWithSpecialEffect[i].SetEffectParameters(customEffect);
+            }
         }
 
         public void Draw()
@@ -52,7 +57,7 @@ namespace RenderLibrary
                 bModels[i].Draw(camera);
             }
             for (int i = 0; i < bModelsWithSpecialEffect.Count; i++){
-                bModelsWithSpecialEffect[i].DrawSpecialEffect(customEffect);
+                bModelsWithSpecialEffect[i].DrawSpecialEffect(customEffect, camera);
         
                 //foreach (ModelMesh mesh in bModels[i].bModel.Meshes)
                 //{
