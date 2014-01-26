@@ -104,7 +104,7 @@ namespace Laboration3Datorgrafik
             sphereBundle.bEnvironmentTextured = true;
             sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
             renderManager.AddBundleModelWithCustomEffect(sphereBundle);
-
+            renderManager.CustomEffect = customEffect;
             renderManager.Load();
 
             Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, customEffect); // TODO: bModel = null ???

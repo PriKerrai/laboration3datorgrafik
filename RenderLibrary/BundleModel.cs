@@ -111,6 +111,7 @@ namespace RenderLibrary
                 mesh.Draw();
             }
         }
+
         public void SetBasicEffectParameters()
         {
             foreach (ModelMesh mesh in bModel.Meshes)
@@ -118,6 +119,8 @@ namespace RenderLibrary
                 foreach (BasicEffect meshEffect in mesh.Effects)
                 {
                     meshEffect.LightingEnabled = true;
+                    meshEffect.Texture = bTexture;
+                    
                 }
             }
         }
@@ -129,8 +132,14 @@ namespace RenderLibrary
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
-
-                        Texture2D texture = ((BasicEffect)part.Effect).Texture;
+                        if (bTexture == null)
+                        {
+                            Texture2D texture = ((BasicEffect)part.Effect).Texture;
+                        }
+                        else 
+                        {
+                            Texture2D texture = bTexture;
+                        }
                         float alpha = ((BasicEffect)part.Effect).Alpha;
                         Vector3 diffuseColor = ((BasicEffect)part.Effect).DiffuseColor;
                         Vector3 specularColor = ((BasicEffect)part.Effect).SpecularColor;

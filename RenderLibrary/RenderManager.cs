@@ -15,13 +15,13 @@ namespace RenderLibrary
         private List<BundleModel> bModelsWithSpecialEffect = new List<BundleModel>();
         private ContentManager Content;
         private Camera camera;
-        Effect customEffect;
+        public Effect CustomEffect{ get; set;}
 
         public RenderManager(ContentManager content, Camera camera) 
         {
             Content = content;
             this.camera = camera;
-            customEffect = Content.Load<Effect>("customEffect");
+            CustomEffect = Content.Load<Effect>("customEffect");
         }
 
         public void AddBundleModelWithNoEffect(BundleModel bModel)
@@ -46,7 +46,7 @@ namespace RenderLibrary
             for (int i = 0; i < bModelsWithSpecialEffect.Count; i++)
             {
                 bModelsWithSpecialEffect[i].bModel = Content.Load<Model>(bModelsWithSpecialEffect[i].bModelPath);
-                bModelsWithSpecialEffect[i].SetEffectParameters(customEffect);
+                bModelsWithSpecialEffect[i].SetEffectParameters(CustomEffect);
             }
         }
 
@@ -58,7 +58,7 @@ namespace RenderLibrary
                 bModels[i].Draw(camera);
             }
             for (int i = 0; i < bModelsWithSpecialEffect.Count; i++){
-                bModelsWithSpecialEffect[i].DrawSpecialEffect(customEffect, camera);
+                bModelsWithSpecialEffect[i].DrawSpecialEffect(CustomEffect, camera);
         
                 //foreach (ModelMesh mesh in bModels[i].bModel.Meshes)
                 //{
