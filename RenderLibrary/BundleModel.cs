@@ -134,6 +134,24 @@ namespace RenderLibrary
                         part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
                         part.Effect.Parameters["SpecularIntensity"].SetValue(SpecularIntensity);
 
+
+                        if (bNormalMap != null && !bEnvironmentTextured)
+                        {
+                            part.Effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
+                            part.Effect.Parameters["EnvironmentTextureEnabled"].SetValue(false);
+                            part.Effect.Parameters["NormalMap"].SetValue(bNormalMap);
+                        }
+                        else if (bEnvironmentTextured)
+                        {
+                            part.Effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
+                            part.Effect.Parameters["EnvironmentTextureEnabled"].SetValue(true);
+                        }
+                        else
+                        {
+                            part.Effect.Parameters["NormalBumpMapEnabled"].SetValue(false);
+                            part.Effect.Parameters["EnvironmentTextureEnabled"].SetValue(false);
+                        }
+
                     }
                     
                 }
