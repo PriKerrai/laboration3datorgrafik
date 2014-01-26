@@ -55,8 +55,8 @@ namespace RenderLibrary
 
                         part.Effect.Parameters["Alpha"].SetValue(1);
                         part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(new Vector3(0.8f, 0.8f, 0.8f), 0.0f));
-                        part.Effect.Parameters["SpecularColor"].SetValue(new Vector4(0f, 0f, 0f, 0f));                        
-                        part.Effect.Parameters["Shininess"].SetValue(16);
+                        part.Effect.Parameters["SpecularColor"].SetValue(new Vector3(0f, 0f, 0f));                        
+                   //     part.Effect.Parameters["Shininess"].SetValue(16);
                         //part.Effect.Parameters["ModelTexture"].SetValue(new Texture2D());
                         //effect.Parameters["NormalTextureEnabled"].SetValue(false);
                     }

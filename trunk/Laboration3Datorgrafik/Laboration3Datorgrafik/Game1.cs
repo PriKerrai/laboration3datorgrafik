@@ -100,15 +100,15 @@ namespace Laboration3Datorgrafik
             customEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
 
             // EnvironmentTextured
-            //BundleModel sphereBundle = new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
-            //sphereBundle.bEnvironmentTextured = true;
-            //sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
-            //renderManager.AddBundleModel(sphereBundle);
+            BundleModel sphereBundle = new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
+            sphereBundle.bEnvironmentTextured = true;
+            sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
+            renderManager.AddBundleModelWithCustomEffect(sphereBundle);
 
             renderManager.Load();
 
-            //Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, customEffect); // TODO: bModel = null ???
-            //sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
+            Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, customEffect); // TODO: bModel = null ???
+            sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
 
             fCamera = new FlyingCamera();
 
