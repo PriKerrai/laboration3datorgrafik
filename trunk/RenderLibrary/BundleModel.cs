@@ -84,7 +84,7 @@ namespace RenderLibrary
                     meshEffect.View = camera.ViewMatrix;
                     meshEffect.World = ((camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition)));
                     meshEffect.Projection = camera.ProjectionMatrix;
-                    meshEffect.LightingEnabled = true;
+                    
                     //meshEffect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
                     //meshEffect.Parameters["View"].SetValue(camera.ViewMatrix);
                     //meshEffect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
@@ -109,6 +109,16 @@ namespace RenderLibrary
                     //}
                 }
                 mesh.Draw();
+            }
+        }
+        public void SetBasicEffectParameters()
+        {
+            foreach (ModelMesh mesh in bModel.Meshes)
+            {
+                foreach (BasicEffect meshEffect in mesh.Effects)
+                {
+                    meshEffect.LightingEnabled = true;
+                }
             }
         }
         public void SetEffectParameters(Effect customEffect)
