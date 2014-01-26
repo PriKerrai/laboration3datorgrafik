@@ -38,6 +38,7 @@ namespace RenderLibrary
             for (int i = 0; i < bModels.Count; i++)
             {
                 bModels[i].bModel = Content.Load<Model>(bModels[i].bModelPath);
+                bModels[i].SetBasicEffectParameters();
               //  if (bModels[i].bTexture == null)
                //     bModels[i].SetEffect(this.customEffect);
 
