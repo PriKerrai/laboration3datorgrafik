@@ -111,7 +111,7 @@ namespace RenderLibrary
                 mesh.Draw();
             }
         }
-        public void DrawSpecialEffect(Effect customEffect)
+        public void SetEffectParameters(Effect customEffect)
         {
             if (bModel != null)
             {
@@ -133,6 +133,37 @@ namespace RenderLibrary
                         part.Effect.Parameters["ModelTexture"].SetValue(bTexture);
                         part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
                         part.Effect.Parameters["SpecularIntensity"].SetValue(SpecularIntensity);
+
+                    }
+                    
+                }
+            }
+        }
+        public void DrawSpecialEffect(Effect customEffect, Camera camera)
+        {
+            if (bModel != null)
+            {
+                foreach (ModelMesh mesh in bModel.Meshes)
+                {
+                    foreach (ModelMeshPart part in mesh.MeshParts)
+                    {
+                    part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
+                    part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
+                    part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+                    part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
+                        //Texture2D texture = ((BasicEffect)part.Effect).Texture;
+                        //float alpha = ((BasicEffect)part.Effect).Alpha;
+                        //Vector3 diffuseColor = ((BasicEffect)part.Effect).DiffuseColor;
+                        //Vector3 specularColor = ((BasicEffect)part.Effect).SpecularColor;
+                        //float SpecularIntensity = ((BasicEffect)part.Effect).SpecularPower;
+
+                        //part.Effect = customEffect.Clone();
+
+                        //part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(diffuseColor, 0));
+                        //part.Effect.Parameters["Alpha"].SetValue(alpha);
+                        //part.Effect.Parameters["ModelTexture"].SetValue(bTexture);
+                        //part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
+                        //part.Effect.Parameters["SpecularIntensity"].SetValue(SpecularIntensity);
                                                 
                     }
                     mesh.Draw();
