@@ -22,7 +22,6 @@ namespace RenderLibrary
         {
             Content = content;
             this.camera = camera;
-            CustomEffect = Content.Load<Effect>("customEffect");
             bundleModel = new BundleModel();
         }
 

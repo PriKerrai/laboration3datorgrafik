@@ -34,7 +34,7 @@ namespace Laboration3Datorgrafik
         Effect customEffect;
         RenderManager renderManager;
         Vector3 jeepPosition = Vector3.Zero;
-        Vector3 cameraPosition = new Vector3(0.0f, 50.0f, 5000.0f);
+        Vector3 cameraPosition = new Vector3(5f, 2f, 2f);
         float aspectRatio;
 
         public Game1()
@@ -82,9 +82,18 @@ namespace Laboration3Datorgrafik
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, 1), "Models\\snowplow", 0.7f));
 
-            floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 100, 100, new Vector3(0, 0, 0));
-
             customEffect = Content.Load<Effect>("customEffect");
+
+            customEffect.Parameters["AmbientLightIntensity"].SetValue(new Vector3(0.4f, 0.4f, 0.4f));
+            customEffect.Parameters["DirectLightDirection"].SetValue(new Vector3(0, -1, 0));
+            customEffect.Parameters["DirectLightDiffuseIntensity"].SetValue(new Vector3(0.6f, 0.6f, 0.6f));
+            customEffect.Parameters["DirectLightSpecularIntensity"].SetValue(new Vector3(0.8f, 0.8f, 0.8f));
+
+            customEffect.Parameters["Alpha"].SetValue(1);
+            customEffect.Parameters["FogEnabled"].SetValue(true);
+            customEffect.Parameters["FogStart"].SetValue(15);
+            customEffect.Parameters["FogEnd"].SetValue(30);
+            customEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
 
             // EnvironmentTextured
             BundleModel sphereBundle = new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
@@ -96,6 +105,8 @@ namespace Laboration3Datorgrafik
             
             Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, customEffect); // TODO: bModel = null ???
             sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
+
+            floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 50, 50, new Vector3(0, 0, 0));
 
             fCamera = new FlyingCamera();
 
