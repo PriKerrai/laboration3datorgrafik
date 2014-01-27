@@ -36,8 +36,6 @@ namespace Laboration3Datorgrafik
         Vector3 jeepPosition = Vector3.Zero;
         Vector3 cameraPosition = new Vector3(0.0f, 50.0f, 5000.0f);
         float aspectRatio;
-        TextureCube sphereTextureCube;
-        Model sphereModel;
 
         public Game1()
         {
@@ -78,26 +76,15 @@ namespace Laboration3Datorgrafik
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            renderManager.AddBundleModelWithNoEffect(new BundleModel(new Vector3(1, 0, 2), "Models\\jeep", 0.8f, Content.Load<Texture2D>("Models\\fbx\\jeep-1"), MathHelper.ToRadians(0)));
-            renderManager.AddBundleModelWithNoEffect(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f, Content.Load<Texture2D>("Models\\fbx\\HelicopterTexture"), MathHelper.ToRadians(0)));
-            renderManager.AddBundleModelWithNoEffect(new BundleModel(new Vector3(-1, 3, 3), "Models\\BeachBall", 0.4f, Content.Load<Texture2D>("Models\\fbx\\BeachBallTexture"), MathHelper.ToRadians(0)));
-            renderManager.AddBundleModelWithNoEffect(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1, Content.Load<Texture2D>("Models\\fbx\\textures-obs-tower-knuq"), MathHelper.ToRadians(0)));
+            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-6, 0, 2), "Models\\jeep", 0.8f));
+            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f));
+            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-1, 3, 3), "Models\\BeachBall", 0.4f));
+            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, 1), "Models\\snowplow", 0.7f));
 
             floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 100, 100, new Vector3(0, 0, 0));
 
             customEffect = Content.Load<Effect>("customEffect");
-
-            customEffect.Parameters["AmbientLightIntensity"].SetValue(new Vector3(0.4f, 0.4f, 0.4f));
-            customEffect.Parameters["DirectLightDirection"].SetValue(Vector3.Down);
-            customEffect.Parameters["DirectLightDiffuseIntensity"].SetValue(new Vector3(0.6f, 0.6f, 0.6f));
-            customEffect.Parameters["DirectLightSpecularIntensity"].SetValue(new Vector3(0.8f, 0.8f, 0.8f));
-            
-            customEffect.Parameters["Alpha"].SetValue(1);
-            customEffect.Parameters["FogEnabled"].SetValue(true);
-            customEffect.Parameters["FogStart"].SetValue(15);
-            customEffect.Parameters["FogEnd"].SetValue(30);
-            customEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
 
             // EnvironmentTextured
             BundleModel sphereBundle = new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
@@ -106,11 +93,12 @@ namespace Laboration3Datorgrafik
             renderManager.AddBundleModelWithCustomEffect(sphereBundle);
             renderManager.CustomEffect = customEffect;
             renderManager.Load();
-
+            
             Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, customEffect); // TODO: bModel = null ???
             sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
 
             fCamera = new FlyingCamera();
+
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
         }
@@ -228,6 +216,7 @@ namespace Laboration3Datorgrafik
             fCamera.ProcessInput(gameTime);
             camera.Update(fCamera.Position, fCamera.Rotation);
 
+            renderManager.Update(gameTime);
             // TODO: Add your update logic here
 
             base.Update(gameTime);

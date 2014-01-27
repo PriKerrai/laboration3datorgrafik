@@ -4,7 +4,7 @@ uniform const float4x4 Projection;
 uniform const float3 EyePosition;
 
 uniform const float3 AmbientLightIntensity;
-uniform const float3 DirectLightDirection;
+float3 DirectLightDirection;
 uniform const float3 DirectLightDiffuseIntensity;
 uniform const float3 DirectLightSpecularIntensity;
 uniform const float3 SpecularColor;    
