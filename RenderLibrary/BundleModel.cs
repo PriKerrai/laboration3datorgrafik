@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace RenderLibrary
 {
@@ -18,9 +19,12 @@ namespace RenderLibrary
         public float bRotation { get; set; }
         public bool bEnvironmentTextured = false;
 
+        public Vector3 bDirectLightningDirection { get; set; }
+
 
         public BundleModel(Model model, Vector3 position, float scale)
         {
+            this.bDirectLightningDirection = new Vector3(0f, 1f, 0f);
             bPosition = position;
             bModel = model;
             bScale = scale;
@@ -33,22 +37,6 @@ namespace RenderLibrary
             bScale = scale;
         }
 
-        public BundleModel(Vector3 position, string modelPath, float scale, Model model)
-        {
-            bPosition = position;
-            bModelPath = modelPath;
-            bScale = scale;
-        }
-
-        public BundleModel(Vector3 position, string modelPath, float scale, Texture2D tPath, float radians)
-        {
-            this.bPosition = position;
-            this.bModelPath = modelPath;
-            this.bScale = scale;
-            this.bTexture = tPath;
-            this.bRotation = radians;
-        }
-
         public BundleModel(Vector3 position, string modelPath, float scale, Texture2D texture, Texture2D normalMap) 
         {
             this.bPosition = position;
@@ -57,6 +45,11 @@ namespace RenderLibrary
             this.bTexture = texture;
             this.bNormalMap = normalMap;
         }
+
+        public BundleModel()
+        {
+            
+        }
         public void Draw(Camera camera)
         {
 
@@ -64,49 +57,12 @@ namespace RenderLibrary
             {
                 foreach (BasicEffect meshEffect in mesh.Effects)
                 {
-
-                    //  part.Effect = customEffect.Clone();
-                    //if (bModels[i].bTexture != null)
-                    //{
-
-                    //    part.Effect = customEffect.Clone();
-                    //    part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(1, 1, 1, 1));
-                    //    part.Effect.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
-                    //}
-
-                    //part.Effect = customEffect;
-                    //if (bModels[i].bTexture != null)
-                    //{
-                    //    part.Effect = customEffect.Clone();
-                    //    part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(1, 1, 1, 1));
-                    //    part.Effect.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
-                    //}
                     meshEffect.View = camera.ViewMatrix;
                     meshEffect.World = ((camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition)));
                     meshEffect.Projection = camera.ProjectionMatrix;
-                    
-                    //meshEffect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
-                    //meshEffect.Parameters["View"].SetValue(camera.ViewMatrix);
-                    //meshEffect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                    //meshEffect.Parameters["EyePosition"].SetValue(camera.Position);
-                    // part.Effect.Parameters["ModelTexture"].SetValue(bModels[i].bTexture);
+                    meshEffect.DirectionalLight0.Direction = bDirectLightningDirection;
 
-                    //if (bNormalMap != null && !bEnvironmentTextured)
-                    //{
-                    //    meshEffect.Parameters["NormalBumpMapEnabled"].SetValue(true);
-                    //    meshEffect.Parameters["EnvironmentTextureEnabled"].SetValue(false);
-                    //    meshEffect.Parameters["NormalMap"].SetValue(bNormalMap);
-                    //}
-                    //else if (bEnvironmentTextured)
-                    //{
-                    //    meshEffect.Parameters["NormalBumpMapEnabled"].SetValue(true);
-                    //    meshEffect.Parameters["EnvironmentTextureEnabled"].SetValue(true);
-                    //}
-                    //else
-                    //{
-                    //    meshEffect.Parameters["NormalBumpMapEnabled"].SetValue(false);
-                    //    meshEffect.Parameters["EnvironmentTextureEnabled"].SetValue(false);
-                    //}
+                    
                 }
                 mesh.Draw();
             }
@@ -119,7 +75,11 @@ namespace RenderLibrary
                 foreach (BasicEffect meshEffect in mesh.Effects)
                 {
                     meshEffect.LightingEnabled = true;
-                    meshEffect.Texture = bTexture;
+                    meshEffect.Texture = meshEffect.Texture;
+                    meshEffect.DirectionalLight0.DiffuseColor = meshEffect.DiffuseColor;
+                    meshEffect.SpecularColor = meshEffect.SpecularColor;
+                    meshEffect.SpecularPower = meshEffect.SpecularPower;
+                    meshEffect.AmbientLightColor = new Vector3(1,1,1);
                     
                 }
             }
@@ -132,24 +92,30 @@ namespace RenderLibrary
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
-                        if (bTexture == null)
-                        {
-                            Texture2D texture = ((BasicEffect)part.Effect).Texture;
-                        }
-                        else 
-                        {
-                            Texture2D texture = bTexture;
-                        }
+                        
+
                         float alpha = ((BasicEffect)part.Effect).Alpha;
+                        Texture2D texture = ((BasicEffect)part.Effect).Texture;
                         Vector3 diffuseColor = ((BasicEffect)part.Effect).DiffuseColor;
                         Vector3 specularColor = ((BasicEffect)part.Effect).SpecularColor;
                         float SpecularIntensity = ((BasicEffect)part.Effect).SpecularPower;
 
                         part.Effect = customEffect.Clone();
 
+                        customEffect.Parameters["AmbientLightIntensity"].SetValue(new Vector3(0.4f, 0.4f, 0.4f));
+                        customEffect.Parameters["DirectLightDirection"].SetValue(new Vector3(0,-1,0));
+                        customEffect.Parameters["DirectLightDiffuseIntensity"].SetValue(new Vector3(0.6f, 0.6f, 0.6f));
+                        customEffect.Parameters["DirectLightSpecularIntensity"].SetValue(new Vector3(0.8f, 0.8f, 0.8f));
+
+                        customEffect.Parameters["Alpha"].SetValue(1);
+                        customEffect.Parameters["FogEnabled"].SetValue(true);
+                        customEffect.Parameters["FogStart"].SetValue(15);
+                        customEffect.Parameters["FogEnd"].SetValue(30);
+                        customEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
+
                         part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(diffuseColor, 0));
                         part.Effect.Parameters["Alpha"].SetValue(alpha);
-                        part.Effect.Parameters["ModelTexture"].SetValue(bTexture);
+                        part.Effect.Parameters["ModelTexture"].SetValue(texture);
                         part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
                         part.Effect.Parameters["SpecularIntensity"].SetValue(SpecularIntensity);
 
@@ -184,29 +150,40 @@ namespace RenderLibrary
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
-                    part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
-                    part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
-                    part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                    part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
-                        //Texture2D texture = ((BasicEffect)part.Effect).Texture;
-                        //float alpha = ((BasicEffect)part.Effect).Alpha;
-                        //Vector3 diffuseColor = ((BasicEffect)part.Effect).DiffuseColor;
-                        //Vector3 specularColor = ((BasicEffect)part.Effect).SpecularColor;
-                        //float SpecularIntensity = ((BasicEffect)part.Effect).SpecularPower;
-
-                        //part.Effect = customEffect.Clone();
-
-                        //part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(diffuseColor, 0));
-                        //part.Effect.Parameters["Alpha"].SetValue(alpha);
-                        //part.Effect.Parameters["ModelTexture"].SetValue(bTexture);
-                        //part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
-                        //part.Effect.Parameters["SpecularIntensity"].SetValue(SpecularIntensity);
-                                                
+                        part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
+                        part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
+                        part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+                        part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
+                        //part.Effect.Parameters["DirectLightDirection"].SetValue(bDirectLightningDirection);
                     }
                     mesh.Draw();
                 }
             }
         }
+
+        public void Update(GameTime gameTime)
+        {
+            ProcessLightPositionChange(gameTime);
+        }
+
+        public void ProcessLightPositionChange(GameTime gameTime)
+        {
+            KeyboardState keys = Keyboard.GetState();
+
+            if (keys.IsKeyDown(Keys.NumPad1))
+                this.bDirectLightningDirection += new Vector3(0.5f, 0f, 0f);
+            if (keys.IsKeyDown(Keys.NumPad3))
+                this.bDirectLightningDirection -= new Vector3(0.5f, 0f, 0f); ;
+            if (keys.IsKeyDown(Keys.NumPad4))
+                this.bDirectLightningDirection += new Vector3(0f, 0.5f, 0f); ;
+            if (keys.IsKeyDown(Keys.NumPad6))
+                this.bDirectLightningDirection -= new Vector3(0f, 0.5f, 0f); ;
+            if (keys.IsKeyDown(Keys.NumPad7))
+               this.bDirectLightningDirection += new Vector3(0f, 0f, 0.5f); ;
+            if (keys.IsKeyDown(Keys.NumPad9))
+                this.bDirectLightningDirection -= new Vector3(0f, 0f, 0.5f); ;
+        }
+
             
     }
 }
