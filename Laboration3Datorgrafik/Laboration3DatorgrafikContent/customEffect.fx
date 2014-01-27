@@ -1,16 +1,16 @@
-﻿uniform const float4x4 World;
-uniform const float4x4 View;
-uniform const float4x4 Projection;
-uniform const float3 EyePosition;
+﻿float4x4 World;
+float4x4 View;
+float4x4 Projection;
+float3 EyePosition;
 
-uniform const float3 AmbientLightIntensity;
+float3 AmbientLightIntensity;
 float3 DirectLightDirection;
-uniform const float3 DirectLightDiffuseIntensity;
-uniform const float3 DirectLightSpecularIntensity;
-uniform const float3 SpecularColor;    
-uniform const float SpecularIntensity;
-uniform const float4 DiffuseColor;
-uniform const float Alpha;
+float3 DirectLightDiffuseIntensity;
+float3 DirectLightSpecularIntensity;
+float3 SpecularColor;    
+float SpecularIntensity;
+float4 DiffuseColor;
+float Alpha;
 
 //Fog settings
 uniform const bool FogEnabled;

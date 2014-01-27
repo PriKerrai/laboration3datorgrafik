@@ -102,23 +102,11 @@ namespace RenderLibrary
 
                         part.Effect = customEffect.Clone();
 
-                        customEffect.Parameters["AmbientLightIntensity"].SetValue(new Vector3(0.4f, 0.4f, 0.4f));
-                        customEffect.Parameters["DirectLightDirection"].SetValue(new Vector3(0,-1,0));
-                        customEffect.Parameters["DirectLightDiffuseIntensity"].SetValue(new Vector3(0.6f, 0.6f, 0.6f));
-                        customEffect.Parameters["DirectLightSpecularIntensity"].SetValue(new Vector3(0.8f, 0.8f, 0.8f));
-
-                        customEffect.Parameters["Alpha"].SetValue(1);
-                        customEffect.Parameters["FogEnabled"].SetValue(true);
-                        customEffect.Parameters["FogStart"].SetValue(15);
-                        customEffect.Parameters["FogEnd"].SetValue(30);
-                        customEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
-
                         part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(diffuseColor, 0));
                         part.Effect.Parameters["Alpha"].SetValue(alpha);
                         part.Effect.Parameters["ModelTexture"].SetValue(texture);
                         part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
                         part.Effect.Parameters["SpecularIntensity"].SetValue(SpecularIntensity);
-
 
                         if (bNormalMap != null && !bEnvironmentTextured)
                         {
