@@ -64,5 +64,17 @@ namespace RenderLibrary
                 bModelsWithSpecialEffect[i].DrawSpecialEffect(CustomEffect, camera);
             }
         }
+
+        public void Draw(Camera camera)
+        {
+            for (int i = 0; i < bModels.Count; i++)
+            {
+                bModels[i].Draw(camera);
+            }
+            for (int i = 0; i < bModelsWithSpecialEffect.Count; i++)
+            {
+                bModelsWithSpecialEffect[i].DrawSpecialEffect(CustomEffect, camera);
+            }
+        }
     }
 }

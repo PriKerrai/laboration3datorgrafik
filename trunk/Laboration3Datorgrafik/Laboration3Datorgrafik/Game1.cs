@@ -96,27 +96,25 @@ namespace Laboration3Datorgrafik
             customEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
 
             // EnvironmentTextured
-            BundleModel sphereBundle = new BundleModel(new Vector3(5, 2, 2), "Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
+            Vector3 speherePosition = new Vector3(5, 2, 2);
+            BundleModel sphereBundle = new BundleModel(speherePosition,"Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
             sphereBundle.bEnvironmentTextured = true;
             sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
             renderManager.AddBundleModelWithCustomEffect(sphereBundle);
             renderManager.CustomEffect = customEffect;
             renderManager.Load();
-            
-            Reflection sphereReflection = new Reflection(cameraPosition, graphics.GraphicsDevice, renderManager, customEffect); // TODO: bModel = null ???
+
+            Reflection sphereReflection = new Reflection(speherePosition, graphics.GraphicsDevice, renderManager, customEffect);
             sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
 
             floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 50, 50, new Vector3(0, 0, 0));
 
             fCamera = new FlyingCamera();
 
-
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
         }
 
-        #region Creating a basic VertexBuffer
-
-
+        #region VertexBuffer
         VertexBuffer vertices;
 
         void CreateCubeVertexBuffer()
@@ -142,15 +140,14 @@ namespace Laboration3Datorgrafik
         }
         #endregion
 
-        #region Creating a basic IndexBuffer
-
+        #region IndexBuffer
         IndexBuffer indices;
 
         void CreateCubeIndexBuffer()
         {
             UInt16[] cubeIndices = new UInt16[number_of_indices];
 
-            //bottom face
+            //bottom
             cubeIndices[0] = 0;
             cubeIndices[1] = 2;
             cubeIndices[2] = 3;
@@ -158,7 +155,7 @@ namespace Laboration3Datorgrafik
             cubeIndices[4] = 1;
             cubeIndices[5] = 2;
 
-            //top face
+            //top
             cubeIndices[6] = 4;
             cubeIndices[7] = 6;
             cubeIndices[8] = 5;
@@ -166,7 +163,7 @@ namespace Laboration3Datorgrafik
             cubeIndices[10] = 7;
             cubeIndices[11] = 6;
 
-            //front face
+            //front
             cubeIndices[12] = 5;
             cubeIndices[13] = 2;
             cubeIndices[14] = 1;
@@ -174,7 +171,7 @@ namespace Laboration3Datorgrafik
             cubeIndices[16] = 6;
             cubeIndices[17] = 2;
 
-            //back face
+            //back
             cubeIndices[18] = 0;
             cubeIndices[19] = 7;
             cubeIndices[20] = 4;
@@ -182,7 +179,7 @@ namespace Laboration3Datorgrafik
             cubeIndices[22] = 3;
             cubeIndices[23] = 7;
 
-            //left face
+            //left
             cubeIndices[24] = 0;
             cubeIndices[25] = 4;
             cubeIndices[26] = 1;
@@ -190,7 +187,7 @@ namespace Laboration3Datorgrafik
             cubeIndices[28] = 4;
             cubeIndices[29] = 5;
 
-            //right face
+            //right
             cubeIndices[30] = 2;
             cubeIndices[31] = 6;
             cubeIndices[32] = 3;
@@ -200,7 +197,6 @@ namespace Laboration3Datorgrafik
 
             indices = new IndexBuffer(GraphicsDevice, IndexElementSize.SixteenBits, number_of_indices, BufferUsage.WriteOnly);
             indices.SetData<UInt16>(cubeIndices);
-
         }
         #endregion
 
