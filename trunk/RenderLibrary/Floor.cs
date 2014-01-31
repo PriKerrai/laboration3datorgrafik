@@ -93,7 +93,10 @@ namespace RenderLibrary
 
         public void Draw(GraphicsDevice graphics, Effect effect, Camera camera)
         {
-            
+            effect.Parameters["DiffuseColor"].SetValue(new Vector4(1f,1f,1f, 0f));
+            effect.Parameters["Alpha"].SetValue(1);
+            effect.Parameters["SpecularColor"].SetValue(new Vector3(1f,1f,1f));
+            effect.Parameters["SpecularIntensity"].SetValue(0.4f);
             effect.Parameters["World"].SetValue(camera.WorldMatrix * Matrix.CreateScale(1) * Matrix.CreateTranslation(new Vector3(-25, 0, -25)));
             effect.Parameters["View"].SetValue(camera.ViewMatrix);
             effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);

@@ -240,7 +240,7 @@ namespace Laboration3Datorgrafik
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkGray, 1.0f, 0);
 
-            floor.Draw(graphics.GraphicsDevice, customEffect, camera);
+            floor.Draw(graphics.GraphicsDevice, customEffect.Clone(), camera);
             renderManager.Draw();
             base.Draw(gameTime);
         }
