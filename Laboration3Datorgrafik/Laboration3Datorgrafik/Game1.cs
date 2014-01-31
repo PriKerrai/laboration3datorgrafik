@@ -76,6 +76,8 @@ namespace Laboration3Datorgrafik
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 50, 50, new Vector3(0, 0, 0));
+
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-6, 0, 2), "Models\\jeep", 0.8f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-1, 3, 3), "Models\\BeachBall", 0.4f));
@@ -95,6 +97,8 @@ namespace Laboration3Datorgrafik
             customEffect.Parameters["FogEnd"].SetValue(30);
             customEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
 
+            
+            
             // EnvironmentTextured
             Vector3 speherePosition = new Vector3(5, 2, 2);
             BundleModel sphereBundle = new BundleModel(speherePosition,"Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
@@ -104,11 +108,10 @@ namespace Laboration3Datorgrafik
             renderManager.CustomEffect = customEffect;
             renderManager.Load();
 
-            Reflection sphereReflection = new Reflection(speherePosition, graphics.GraphicsDevice, renderManager, customEffect);
-            sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
+            Reflection sphereReflection = new Reflection(speherePosition, graphics.GraphicsDevice, renderManager, customEffect.Clone());
+            sphereReflection.RemapModel(customEffect.Clone(), sphereBundle.bModel);
 
-            floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 50, 50, new Vector3(0, 0, 0));
-
+            
             fCamera = new FlyingCamera();
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
