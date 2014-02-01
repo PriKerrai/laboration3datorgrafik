@@ -52,7 +52,6 @@ namespace RenderLibrary
         }
         public void Draw(Camera camera)
         {
-
             foreach (ModelMesh mesh in bModel.Meshes)
             {
                 foreach (BasicEffect meshEffect in mesh.Effects)
@@ -118,6 +117,7 @@ namespace RenderLibrary
                         {
                             part.Effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
                             part.Effect.Parameters["EnvironmentTextureEnabled"].SetValue(true);
+                            part.Effect.Parameters["NormalMap"].SetValue(bNormalMap);
                         }
                         else
                         {
