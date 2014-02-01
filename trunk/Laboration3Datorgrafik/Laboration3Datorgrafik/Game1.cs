@@ -34,7 +34,7 @@ namespace Laboration3Datorgrafik
         Effect customEffect;
         RenderManager renderManager;
         Vector3 jeepPosition = Vector3.Zero;
-        Vector3 cameraPosition = new Vector3(5f, 2f, 2f);
+        Vector3 cameraPosition = new Vector3(-2f, 2f, 2f);
         float aspectRatio;
 
         public Game1()
@@ -80,27 +80,25 @@ namespace Laboration3Datorgrafik
 
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-6, 0, 2), "Models\\jeep", 0.8f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f));
-            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-1, 3, 3), "Models\\BeachBall", 0.4f));
+            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-1, 5, 3), "Models\\BeachBall", 0.4f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, 1), "Models\\snowplow", 0.7f));
 
             customEffect = Content.Load<Effect>("customEffect");
 
-            customEffect.Parameters["AmbientLightIntensity"].SetValue(new Vector3(0.4f, 0.4f, 0.4f));
+            customEffect.Parameters["AmbientLightIntensity"].SetValue(new Vector3(0.5f, 0.5f, 0.5f));
             customEffect.Parameters["DirectLightDirection"].SetValue(new Vector3(0, -1, 0));
-            customEffect.Parameters["DirectLightDiffuseIntensity"].SetValue(new Vector3(0.6f, 0.6f, 0.6f));
-            customEffect.Parameters["DirectLightSpecularIntensity"].SetValue(new Vector3(0.8f, 0.8f, 0.8f));
+            customEffect.Parameters["DirectLightDiffuseIntensity"].SetValue(new Vector3(0.5f, 0.5f, 0.5f));
+            customEffect.Parameters["DirectLightSpecularIntensity"].SetValue(new Vector3(0.7f, 0.7f, 0.7f));
 
             customEffect.Parameters["Alpha"].SetValue(1);
             customEffect.Parameters["FogEnabled"].SetValue(true);
-            customEffect.Parameters["FogStart"].SetValue(15);
-            customEffect.Parameters["FogEnd"].SetValue(30);
+            customEffect.Parameters["FogStart"].SetValue(10);
+            customEffect.Parameters["FogEnd"].SetValue(25);
             customEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
-
-            
             
             // EnvironmentTextured
-            Vector3 speherePosition = new Vector3(5, 2, 2);
+            Vector3 speherePosition = new Vector3(-2, 2, 2);
             BundleModel sphereBundle = new BundleModel(speherePosition,"Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
             sphereBundle.bEnvironmentTextured = true;
             sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
