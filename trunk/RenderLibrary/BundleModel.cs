@@ -132,26 +132,43 @@ namespace RenderLibrary
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
-                        //if (mesh.Effects[0].Parameters["Alpha"].GetValueSingle() == 1)
-                        //{
-                        //    if (mesh.Name.Equals("Circle"))
-                        //    {
-                        //        rManager.device.RasterizerState = rManager.rasterizerStateNone;
-                        //    }
-                        //    else rManager.device.RasterizerState = rManager.rasterizerStateNormal;
-                        //}
-                        
-                        rManager.device.RasterizerState = rManager.rasterizerStateNone;
-                        
+
+                        if (mesh.Effects[0].Parameters["Alpha"].GetValueSingle() == 1)
+                        {
+                            part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
+                            part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
+                            part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+                            part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
+                        }
+                    }
+                    mesh.Draw();
+                }
+                DrawTranslucentMeshes(bModel, camera, rManager);
+            }
+        }
+        private void DrawTranslucentMeshes(Model bModel, Camera camera, RenderManager rManager)
+        {
+            foreach (ModelMesh mesh in bModel.Meshes)
+            {
+                foreach (ModelMeshPart part in mesh.MeshParts)
+                {
+                    if (mesh.Effects[0].Parameters["Alpha"].GetValueSingle() < 1)
+                    {
+
+                        rManager.device.RasterizerState = rManager.rasterizerStateNormal;
+
                         part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
                         part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
                         part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                         part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
                     }
-                    mesh.Draw();
                 }
+                mesh.Draw();
             }
         }
+
+      
+    
 
     }
 }

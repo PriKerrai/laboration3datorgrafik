@@ -113,15 +113,15 @@ namespace Laboration3Datorgrafik
             sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
 
             renderManager.AddBundleModelWithCustomEffect(sphereBundle);
-            renderManager.CustomEffect = customEffect.Clone();
+            renderManager.CustomEffect = customEffect;
             renderManager.Graphics = graphics;
             renderManager.Load();
 
             floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 50, 50, new Vector3(0, 0, 0));
-            floor.SetEffectParameters(customEffect.Clone());
+            floor.SetEffectParameters(customEffect);
             renderManager.Floor = floor;
 
-            sphereReflection = new Reflection(speherePosition, graphics.GraphicsDevice, renderManager, customEffect.Clone());
+            sphereReflection = new Reflection(speherePosition, graphics.GraphicsDevice, renderManager, customEffect);
 
             fCamera = new FlyingCamera();
 
@@ -236,7 +236,7 @@ namespace Laboration3Datorgrafik
             
             fCamera.ProcessInput(gameTime);
             camera.Update(fCamera.Position, fCamera.Rotation);
-            floor.SetEffectParameters(customEffect.Clone());
+            
 
             // TODO: Add your update logic here
 
@@ -253,7 +253,7 @@ namespace Laboration3Datorgrafik
 
             //floor.Draw(graphics.GraphicsDevice, customEffect, camera);
             renderManager.Draw();
-            sphereReflection.RemapModel(customEffect.Clone(), sphereBundle.bModel);
+            sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
             base.Draw(gameTime);
         }
     }
