@@ -15,16 +15,24 @@ namespace RenderLibrary
         private List<BundleModel> bModels = new List<BundleModel>();
         private List<BundleModel> bModelsWithSpecialEffect = new List<BundleModel>();
         private ContentManager Content;
+        public RasterizerState rasterizerStateNormal;
+        public RasterizerState rasterizerStateNone;
+        public GraphicsDevice device;
         private Camera camera;
         public Effect CustomEffect { get; set; }
         public Floor Floor;
         public GraphicsDeviceManager Graphics;
 
-        public RenderManager(ContentManager content, Camera camera)
+        public RenderManager(ContentManager content, Camera camera, GraphicsDevice device)
         {
             Content = content;
             this.camera = camera;
             bundleModel = new BundleModel();
+            this.device = device;
+            rasterizerStateNone = new RasterizerState();
+            rasterizerStateNormal = new RasterizerState();
+            rasterizerStateNone = RasterizerState.CullNone;
+            rasterizerStateNormal = RasterizerState.CullCounterClockwise;
         }
 
         public void AddBundleModelWithNoEffect(BundleModel bModel)
@@ -59,7 +67,7 @@ namespace RenderLibrary
                 bModels[i].Draw(camera);
             }
             for (int i = 0; i < bModelsWithSpecialEffect.Count; i++){
-                bModelsWithSpecialEffect[i].DrawSpecialEffect(CustomEffect, camera);
+                bModelsWithSpecialEffect[i].DrawSpecialEffect(CustomEffect, camera, this);
             }
         }
 
@@ -73,7 +81,7 @@ namespace RenderLibrary
             }
             for (int i = 0; i < bModelsWithSpecialEffect.Count; i++)
             {
-                bModelsWithSpecialEffect[i].DrawSpecialEffect(CustomEffect, camera);
+                bModelsWithSpecialEffect[i].DrawSpecialEffect(CustomEffect, camera, this);
             }
         }
     }
