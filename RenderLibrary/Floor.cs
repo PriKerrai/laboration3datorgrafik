@@ -15,6 +15,7 @@ namespace RenderLibrary
         private VertexBuffer _vertexBuffer;
         private Texture2D _texture;
         private Texture2D _normalMap;
+        private Effect effect;
         private ushort _primitiveCount = 0;
         protected Vector3 _position;
         protected Matrix World { get; set; }
@@ -90,23 +91,29 @@ namespace RenderLibrary
             _vertexBuffer = new VertexBuffer(graphics, typeof(VertexPositionNormalTextureTangentBinormal), verticeData.Length, BufferUsage.WriteOnly);
             _vertexBuffer.SetData(verticeData);
         }
-
-        public void Draw(GraphicsDevice graphics, Effect effect, Camera camera)
+        public void SetEffectParameters(Effect effect) 
         {
-            effect.Parameters["DiffuseColor"].SetValue(new Vector4(1f,1f,1f, 0f));
+            this.effect = effect;
+            effect.Parameters["DiffuseColor"].SetValue(new Vector4(1f, 1f, 1f, 0f));
             effect.Parameters["Alpha"].SetValue(1);
-            effect.Parameters["SpecularColor"].SetValue(new Vector3(1f,1f,1f));
+            effect.Parameters["SpecularColor"].SetValue(new Vector3(1f, 1f, 1f));
             effect.Parameters["SpecularIntensity"].SetValue(0.4f);
-            effect.Parameters["World"].SetValue(camera.WorldMatrix * Matrix.CreateScale(1) * Matrix.CreateTranslation(new Vector3(-25, 0, -25)));
-            effect.Parameters["View"].SetValue(camera.ViewMatrix);
-            effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-            effect.Parameters["EyePosition"].SetValue(camera.Position);
             effect.Parameters["ModelTexture"].SetValue(_texture);
             effect.Parameters["NormalMap"].SetValue(_normalMap);
             effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
+
+        }
+        public void Draw(GraphicsDevice graphics, Effect effect, Camera camera)
+        {
+
+            this.effect.Parameters["World"].SetValue(camera.WorldMatrix * Matrix.CreateScale(1) * Matrix.CreateTranslation(new Vector3(-25, 0, -25)));
+            this.effect.Parameters["View"].SetValue(camera.ViewMatrix);
+            this.effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+            this.effect.Parameters["EyePosition"].SetValue(camera.Position);
+
             graphics.SetVertexBuffer(_vertexBuffer);
 
-            effect.CurrentTechnique.Passes[0].Apply();
+            this.effect.CurrentTechnique.Passes[0].Apply();
 
             graphics.DrawPrimitives(PrimitiveType.TriangleList, 0, _primitiveCount);
         }
