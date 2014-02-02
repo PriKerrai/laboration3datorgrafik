@@ -50,11 +50,6 @@ namespace RenderLibrary
             }
         }
 
-        public void Update(GameTime gameTime)
-        {
-            bundleModel.ProcessLightPositionChange(gameTime);
-        }
-
         public void Draw()
         {
             Floor.Draw(Graphics.GraphicsDevice, CustomEffect, camera);

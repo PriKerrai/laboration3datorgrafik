@@ -19,12 +19,8 @@ namespace RenderLibrary
         public float bRotation { get; set; }
         public bool bEnvironmentTextured = false;
 
-        public Vector3 bDirectLightningDirection { get; set; }
-
-
         public BundleModel(Model model, Vector3 position, float scale)
         {
-            this.bDirectLightningDirection = new Vector3(0f, 1f, 0f);
             bPosition = position;
             bModel = model;
             bScale = scale;
@@ -59,9 +55,7 @@ namespace RenderLibrary
                     meshEffect.View = camera.ViewMatrix;
                     meshEffect.World = ((camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition)));
                     meshEffect.Projection = camera.ProjectionMatrix;
-                    meshEffect.DirectionalLight0.Direction = bDirectLightningDirection;
-
-                    
+              
                 }
                 mesh.Draw();
             }
@@ -142,36 +136,11 @@ namespace RenderLibrary
                         part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
                         part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                         part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
-                        //part.Effect.Parameters["DirectLightDirection"].SetValue(bDirectLightningDirection);
                     }
                     mesh.Draw();
                 }
             }
         }
 
-        public void Update(GameTime gameTime)
-        {
-            ProcessLightPositionChange(gameTime);
-        }
-
-        public void ProcessLightPositionChange(GameTime gameTime)
-        {
-            KeyboardState keys = Keyboard.GetState();
-
-            if (keys.IsKeyDown(Keys.NumPad1))
-                this.bDirectLightningDirection += new Vector3(0.5f, 0f, 0f);
-            if (keys.IsKeyDown(Keys.NumPad3))
-                this.bDirectLightningDirection -= new Vector3(0.5f, 0f, 0f); ;
-            if (keys.IsKeyDown(Keys.NumPad4))
-                this.bDirectLightningDirection += new Vector3(0f, 0.5f, 0f); ;
-            if (keys.IsKeyDown(Keys.NumPad6))
-                this.bDirectLightningDirection -= new Vector3(0f, 0.5f, 0f); ;
-            if (keys.IsKeyDown(Keys.NumPad7))
-               this.bDirectLightningDirection += new Vector3(0f, 0f, 0.5f); ;
-            if (keys.IsKeyDown(Keys.NumPad9))
-                this.bDirectLightningDirection -= new Vector3(0f, 0f, 0.5f); ;
-        }
-
-            
     }
 }
