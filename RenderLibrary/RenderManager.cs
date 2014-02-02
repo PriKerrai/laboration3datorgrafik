@@ -16,9 +16,11 @@ namespace RenderLibrary
         private List<BundleModel> bModelsWithSpecialEffect = new List<BundleModel>();
         private ContentManager Content;
         private Camera camera;
-        public Effect CustomEffect{ get; set;}
+        public Effect CustomEffect { get; set; }
+        public Floor Floor;
+        public GraphicsDeviceManager Graphics;
 
-        public RenderManager(ContentManager content, Camera camera) 
+        public RenderManager(ContentManager content, Camera camera)
         {
             Content = content;
             this.camera = camera;
@@ -55,7 +57,8 @@ namespace RenderLibrary
 
         public void Draw()
         {
-            
+            Floor.Draw(Graphics.GraphicsDevice, CustomEffect, camera);
+
             for (int i = 0; i < bModels.Count; i++)
             {
                 bModels[i].Draw(camera);
@@ -67,6 +70,8 @@ namespace RenderLibrary
 
         public void Draw(Camera camera)
         {
+            Floor.Draw(Graphics.GraphicsDevice, CustomEffect, camera);
+
             for (int i = 0; i < bModels.Count; i++)
             {
                 bModels[i].Draw(camera);
