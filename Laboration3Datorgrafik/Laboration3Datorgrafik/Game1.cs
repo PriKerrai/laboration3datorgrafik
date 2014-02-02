@@ -233,7 +233,6 @@ namespace Laboration3Datorgrafik
             camera.Update(fCamera.Position, fCamera.Rotation);
             floor.SetEffectParameters(customEffect);
 
-            renderManager.Update(gameTime);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
