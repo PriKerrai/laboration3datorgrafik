@@ -48,6 +48,7 @@ namespace RenderLibrary
         }
         public void Draw(Camera camera)
         {
+
             foreach (ModelMesh mesh in bModel.Meshes)
             {
                 foreach (BasicEffect meshEffect in mesh.Effects)
@@ -111,7 +112,6 @@ namespace RenderLibrary
                         {
                             part.Effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
                             part.Effect.Parameters["EnvironmentTextureEnabled"].SetValue(true);
-                            part.Effect.Parameters["NormalMap"].SetValue(bNormalMap);
                         }
                         else
                         {
@@ -124,7 +124,7 @@ namespace RenderLibrary
                 }
             }
         }
-        public void DrawSpecialEffect(Effect customEffect, Camera camera)
+        public void DrawSpecialEffect(Effect customEffect, Camera camera, RenderManager rManager)
         {
             if (bModel != null)
             {
@@ -132,6 +132,17 @@ namespace RenderLibrary
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
+                        //if (mesh.Effects[0].Parameters["Alpha"].GetValueSingle() == 1)
+                        //{
+                        //    if (mesh.Name.Equals("Circle"))
+                        //    {
+                        //        rManager.device.RasterizerState = rManager.rasterizerStateNone;
+                        //    }
+                        //    else rManager.device.RasterizerState = rManager.rasterizerStateNormal;
+                        //}
+                        
+                        rManager.device.RasterizerState = rManager.rasterizerStateNone;
+                        
                         part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
                         part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
                         part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
