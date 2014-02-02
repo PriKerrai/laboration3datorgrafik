@@ -34,7 +34,10 @@ namespace Laboration3Datorgrafik
         Effect customEffect;
         RenderManager renderManager;
         Vector3 jeepPosition = Vector3.Zero;
-        Vector3 cameraPosition = new Vector3(-2f, 2f, 2f);
+        Vector3 speherePosition;
+        BundleModel sphereBundle;
+        Reflection sphereReflection;
+        Vector3 cameraPosition = new Vector3(5f, 2f, 2f);
         float aspectRatio;
 
         public Game1()
@@ -98,18 +101,23 @@ namespace Laboration3Datorgrafik
             customEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
             
             // EnvironmentTextured
-            Vector3 speherePosition = new Vector3(-2, 2, 2);
-            BundleModel sphereBundle = new BundleModel(speherePosition,"Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
+            speherePosition = new Vector3(-2, 2, -3);
+
+            sphereBundle = new BundleModel(speherePosition,"Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
             sphereBundle.bEnvironmentTextured = true;
             sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
+
             renderManager.AddBundleModelWithCustomEffect(sphereBundle);
             renderManager.CustomEffect = customEffect;
+            renderManager.Graphics = graphics;
             renderManager.Load();
 
-            Reflection sphereReflection = new Reflection(speherePosition, graphics.GraphicsDevice, renderManager, customEffect.Clone());
-            sphereReflection.RemapModel(customEffect.Clone(), sphereBundle.bModel);
+            floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 50, 50, new Vector3(0, 0, 0));
+            floor.SetEffectParameters(customEffect);
+            renderManager.Floor = floor;
 
-            
+            sphereReflection = new Reflection(speherePosition, graphics.GraphicsDevice, renderManager, customEffect);
+
             fCamera = new FlyingCamera();
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
@@ -220,7 +228,7 @@ namespace Laboration3Datorgrafik
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
+            
             fCamera.ProcessInput(gameTime);
             camera.Update(fCamera.Position, fCamera.Rotation);
             floor.SetEffectParameters(customEffect);
@@ -239,8 +247,9 @@ namespace Laboration3Datorgrafik
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkGray, 1.0f, 0);
 
-            floor.Draw(graphics.GraphicsDevice, customEffect.Clone(), camera);
+            //floor.Draw(graphics.GraphicsDevice, customEffect, camera);
             renderManager.Draw();
+            sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
             base.Draw(gameTime);
         }
     }
