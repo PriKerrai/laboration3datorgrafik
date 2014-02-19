@@ -229,16 +229,9 @@ namespace Laboration3Datorgrafik
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
-        {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-            
+        {   
             fCamera.ProcessInput(gameTime);
             camera.Update(fCamera.Position, fCamera.Rotation);
-            
-
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
@@ -251,7 +244,6 @@ namespace Laboration3Datorgrafik
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkGray, 1.0f, 0);
 
-            //floor.Draw(graphics.GraphicsDevice, customEffect, camera);
             renderManager.Draw();
             sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
             base.Draw(gameTime);

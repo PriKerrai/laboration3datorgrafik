@@ -143,10 +143,10 @@ namespace RenderLibrary
                     }
                     mesh.Draw();
                 }
-                DrawTranslucentMeshes(bModel, camera, rManager);
+                //DrawTranslucentMeshes(bModel, camera, rManager);
             }
         }
-        private void DrawTranslucentMeshes(Model bModel, Camera camera, RenderManager rManager)
+        public void DrawTranslucentMeshes(Camera camera, RenderManager rManager)
         {
             foreach (ModelMesh mesh in bModel.Meshes)
             {
