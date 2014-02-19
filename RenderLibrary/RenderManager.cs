@@ -69,6 +69,10 @@ namespace RenderLibrary
             for (int i = 0; i < bModelsWithSpecialEffect.Count; i++){
                 bModelsWithSpecialEffect[i].DrawSpecialEffect(CustomEffect, camera, this);
             }
+            for (int i = 0; i < bModelsWithSpecialEffect.Count; i++)
+            {
+                bModelsWithSpecialEffect[i].DrawTranslucentMeshes(camera, this);
+            }
         }
 
         public void Draw(Camera camera)
