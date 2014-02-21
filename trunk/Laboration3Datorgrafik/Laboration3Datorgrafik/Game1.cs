@@ -94,10 +94,10 @@ namespace Laboration3Datorgrafik
 
             customEffect = Content.Load<Effect>("customEffect");
 
-            customEffect.Parameters["AmbientLightIntensity"].SetValue(new Vector3(0.5f, 0.5f, 0.5f));
+            customEffect.Parameters["AmbientLightIntensity"].SetValue(new Vector3(0.45f, 0.45f, 0.45f));
             customEffect.Parameters["DirectLightDirection"].SetValue(new Vector3(0, -1, 0));
             customEffect.Parameters["DirectLightDiffuseIntensity"].SetValue(new Vector3(0.5f, 0.5f, 0.5f));
-            customEffect.Parameters["DirectLightSpecularIntensity"].SetValue(new Vector3(0.7f, 0.7f, 0.7f));
+            customEffect.Parameters["DirectLightSpecularIntensity"].SetValue(new Vector3(0.55f, 0.55f, 0.55f));
 
             customEffect.Parameters["Alpha"].SetValue(1);
             customEffect.Parameters["FogEnabled"].SetValue(true);

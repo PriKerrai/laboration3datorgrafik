@@ -62,22 +62,6 @@ namespace RenderLibrary
             }
         }
 
-        public void SetBasicEffectParameters()
-        {
-            foreach (ModelMesh mesh in bModel.Meshes)
-            {
-                foreach (BasicEffect meshEffect in mesh.Effects)
-                {
-                    meshEffect.LightingEnabled = true;
-                    meshEffect.Texture = meshEffect.Texture;
-                    meshEffect.DirectionalLight0.DiffuseColor = meshEffect.DiffuseColor;
-                    meshEffect.SpecularColor = meshEffect.SpecularColor;
-                    meshEffect.SpecularPower = meshEffect.SpecularPower;
-                    meshEffect.AmbientLightColor = new Vector3(1,1,1);
-                    
-                }
-            }
-        }
         public void SetEffectParameters(Effect customEffect)
         {
             if (bModel != null)
@@ -92,7 +76,7 @@ namespace RenderLibrary
                         Texture2D texture = ((BasicEffect)part.Effect).Texture;
                         Vector3 diffuseColor = ((BasicEffect)part.Effect).DiffuseColor;
                         Vector3 specularColor = ((BasicEffect)part.Effect).SpecularColor;
-                        float SpecularIntensity = ((BasicEffect)part.Effect).SpecularPower;
+                        float shininess = ((BasicEffect)part.Effect).SpecularPower;
 
                         part.Effect = customEffect.Clone();
 
@@ -100,7 +84,7 @@ namespace RenderLibrary
                         part.Effect.Parameters["Alpha"].SetValue(alpha);
                         part.Effect.Parameters["ModelTexture"].SetValue(texture);
                         part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
-                        part.Effect.Parameters["SpecularIntensity"].SetValue(SpecularIntensity);
+                        part.Effect.Parameters["Shininess"].SetValue(shininess);
 
                         if (bNormalMap != null && !bEnvironmentTextured)
                         {

@@ -97,11 +97,10 @@ namespace RenderLibrary
             effect.Parameters["DiffuseColor"].SetValue(new Vector4(1f, 1f, 1f, 0f));
             effect.Parameters["Alpha"].SetValue(1);
             effect.Parameters["SpecularColor"].SetValue(new Vector3(1f, 1f, 1f));
-            effect.Parameters["SpecularIntensity"].SetValue(0.4f);
+            effect.Parameters["Shininess"].SetValue(0.4f);
             effect.Parameters["ModelTexture"].SetValue(_texture);
             effect.Parameters["NormalMap"].SetValue(_normalMap);
             effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
-
         }
         public void Draw(GraphicsDevice graphics, Effect effect, Camera camera)
         {

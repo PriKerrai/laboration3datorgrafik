@@ -8,7 +8,7 @@ float3 DirectLightDirection;
 float3 DirectLightDiffuseIntensity;
 float3 DirectLightSpecularIntensity;
 float3 SpecularColor;    
-float SpecularIntensity;
+float  Shininess;
 float4 DiffuseColor;
 float Alpha;
 
@@ -90,15 +90,20 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
 	float3 specularColor = SpecularColor;
-	float specularIntensity = SpecularIntensity;
+	float shininess = Shininess;
 	float3 normal = input.Normal;
 	float4 dColor = DiffuseColor;
-	float4 ambient = float4(DiffuseColor.rgb * AmbientLightIntensity, 0);
+	float4 tex = tex2D(textureSampler, input.TextureCoordinate);
+
+	if (tex.r == 0 && tex.g == 0 && tex.b == 0)
+		tex = float4(1, 1, 1, 1);
+	
+	float4 ambient = float4(DiffuseColor.rgb * tex.rgb * AmbientLightIntensity, 0);
 	
 	if (NormalBumpMapEnabled) 
 	{
 		float3 bump = 2.0 * (tex2D(bumpSampler, input.TextureCoordinate) - (0.5, 0.5, 0.5));
-		normal = normalize(input.Normal + (bump.x * input.Tangent + bump.y * input.Binormal));
+		normal = normalize(bump.z*input.Normal + bump.x*input.Tangent + bump.y*input.Binormal);
 	}
 
     float3 l = -DirectLightDirection;
@@ -108,14 +113,14 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
  
 	float3 Id = DirectLightDiffuseIntensity;
 	float Kd = saturate(dot(l, n));
-	float4 diffuse = float4(Kd * dColor.rgb * Id, dColor.a);
+	float4 diffuse = float4(Kd * dColor.rgb * tex.rgb * Id, dColor.a);
 	
 	float3 Is = DirectLightSpecularIntensity;
 	float f = 1.0;
 	if (Kd == 0) 
 		f = 0.0;
 
-    float4 specular = float4(f * Is * pow(saturate(dot(n, h)), specularIntensity) * specularColor, 0);
+    float4 specular = float4(f * Is * pow(saturate(dot(n, h)), shininess) * specularColor, 0);
  
     float4 textureColor = tex2D(textureSampler, input.TextureCoordinate);
 	
