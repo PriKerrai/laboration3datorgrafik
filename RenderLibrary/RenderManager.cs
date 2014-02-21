@@ -46,11 +46,6 @@ namespace RenderLibrary
 
         public void Load() 
         {
-            for (int i = 0; i < bModels.Count; i++)
-            {
-                bModels[i].bModel = Content.Load<Model>(bModels[i].bModelPath);
-                bModels[i].SetBasicEffectParameters();
-            }
             for (int i = 0; i < bModelsWithSpecialEffect.Count; i++)
             {
                 bModelsWithSpecialEffect[i].bModel = Content.Load<Model>(bModelsWithSpecialEffect[i].bModelPath);
