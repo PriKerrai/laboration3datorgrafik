@@ -70,45 +70,46 @@ namespace RenderLibrary
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
-                        
-
-                        float alpha = ((BasicEffect)part.Effect).Alpha;
-                        Texture2D texture = ((BasicEffect)part.Effect).Texture;
-                        Vector3 diffuseColor = ((BasicEffect)part.Effect).DiffuseColor;
-                        Vector3 specularColor = ((BasicEffect)part.Effect).SpecularColor;
-                        float shininess = ((BasicEffect)part.Effect).SpecularPower;
-
-                        part.Effect = customEffect.Clone();
-
-                        part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(diffuseColor, 0));
-                        part.Effect.Parameters["Alpha"].SetValue(alpha);
-                        part.Effect.Parameters["ModelTexture"].SetValue(texture);
-                        part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
-                        part.Effect.Parameters["Shininess"].SetValue(shininess);
-
-                        if (bNormalMap != null && !bEnvironmentTextured)
+                        if (part.Effect is BasicEffect )
                         {
-                            part.Effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
-                            part.Effect.Parameters["EnvironmentTextureEnabled"].SetValue(false);
-                            part.Effect.Parameters["NormalMap"].SetValue(bNormalMap);
-                        }
-                        else if (bEnvironmentTextured)
-                        {
-                            part.Effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
-                            part.Effect.Parameters["EnvironmentTextureEnabled"].SetValue(true);
-                        }
-                        else
-                        {
-                            part.Effect.Parameters["NormalBumpMapEnabled"].SetValue(false);
-                            part.Effect.Parameters["EnvironmentTextureEnabled"].SetValue(false);
-                        }
 
-                    }
-                    
+                            float alpha = ((BasicEffect)part.Effect).Alpha;
+                            Texture2D texture = ((BasicEffect)part.Effect).Texture;
+                            Vector3 diffuseColor = ((BasicEffect)part.Effect).DiffuseColor;
+                            Vector3 specularColor = ((BasicEffect)part.Effect).SpecularColor;
+                            float shininess = ((BasicEffect)part.Effect).SpecularPower;
+
+                            part.Effect = customEffect.Clone();
+
+                            part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(diffuseColor, 0));
+                            part.Effect.Parameters["Alpha"].SetValue(alpha);
+                            part.Effect.Parameters["ModelTexture"].SetValue(texture);
+                            part.Effect.Parameters["SpecularColor"].SetValue(specularColor);
+                            part.Effect.Parameters["Shininess"].SetValue(shininess);
+
+                            if (bNormalMap != null && !bEnvironmentTextured)
+                            {
+                                part.Effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
+                                part.Effect.Parameters["EnvironmentTextureEnabled"].SetValue(false);
+                                part.Effect.Parameters["NormalMap"].SetValue(bNormalMap);
+                            }
+                            else if (bEnvironmentTextured)
+                            {
+                                part.Effect.Parameters["NormalBumpMapEnabled"].SetValue(true);
+                                part.Effect.Parameters["EnvironmentTextureEnabled"].SetValue(true);
+                            }
+                            else
+                            {
+                                part.Effect.Parameters["NormalBumpMapEnabled"].SetValue(false);
+                                part.Effect.Parameters["EnvironmentTextureEnabled"].SetValue(false);
+                            }
+
+                        }
+                    }   
                 }
             }
         }
-        public void DrawSpecialEffect(Effect customEffect, Camera camera, RenderManager rManager)
+        public void DrawSpecialEffect(GraphicsDevice graphics, Camera camera, RenderManager rManager)
         {
             if (bModel != null)
             {
@@ -119,10 +120,15 @@ namespace RenderLibrary
 
                         if (mesh.Effects[0].Parameters["Alpha"].GetValueSingle() == 1)
                         {
+                            if (mesh.Name.Equals("Circle"))
+                                graphics.RasterizerState = RenderManager.NoCullingState;
+                            else
+                                graphics.RasterizerState = RenderManager.CullingState;
                             part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
                             part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
                             part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                             part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
+                            graphics.RasterizerState = RenderManager.CullingState;
                         }
                     }
                     mesh.Draw();
@@ -139,7 +145,7 @@ namespace RenderLibrary
                     if (mesh.Effects[0].Parameters["Alpha"].GetValueSingle() < 1)
                     {
 
-                        rManager.device.RasterizerState = rManager.rasterizerStateNormal;
+                      //  rManager.device.RasterizerState = rManager.rasterizerStateNormal;
 
                         part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
                         part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);

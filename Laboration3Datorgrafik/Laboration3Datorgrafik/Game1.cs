@@ -45,6 +45,11 @@ namespace Laboration3Datorgrafik
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferMultiSampling = true;
+            this.IsFixedTimeStep = false;
+            graphics.SynchronizeWithVerticalRetrace = false;
 
         }
 
@@ -59,10 +64,15 @@ namespace Laboration3Datorgrafik
             //this.IsFixedTimeStep = false;
             //graphics.SynchronizeWithVerticalRetrace = false;
 
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720;
-            graphics.IsFullScreen = false;
-            graphics.ApplyChanges();
+            //graphics.PreferredBackBufferWidth = 1280;
+            //graphics.PreferredBackBufferHeight = 720;
+            //graphics.IsFullScreen = false;
+            //graphics.ApplyChanges();
+
+            GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullCounterClockwiseFace };
+            GraphicsDevice.BlendState = BlendState.AlphaBlend;
+
+
             Window.Title = "Datorgrafik Lab 3";
             this.camera = new Camera(GraphicsDevice, new Vector3(0, 0, -10));
             
@@ -85,12 +95,14 @@ namespace Laboration3Datorgrafik
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 50, 50, new Vector3(0, 0, 0));
+            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, 1), "Models\\snowplow", 0.7f));
 
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-6, 0, 2), "Models\\jeep", 0.8f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-1, 5, 3), "Models\\BeachBall", 0.4f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1));
-            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, 1), "Models\\snowplow", 0.7f));
+            
+            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, -1), "Models\\snowplow", 0.7f));
 
             customEffect = Content.Load<Effect>("customEffect");
 
@@ -106,13 +118,13 @@ namespace Laboration3Datorgrafik
             customEffect.Parameters["FogColor"].SetValue(Color.DarkGray.ToVector3());
             
             // EnvironmentTextured
-            speherePosition = new Vector3(-2, 2, -3);
+            //speherePosition = new Vector3(-2, 2, -3);
 
-            sphereBundle = new BundleModel(speherePosition,"Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
-            sphereBundle.bEnvironmentTextured = true;
-            sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
+            //sphereBundle = new BundleModel(speherePosition,"Models\\sphere_mapped", 0.8f, Content.Load<Texture2D>("Models\\BeachBallNormalMap"), Content.Load<Texture2D>("Models\\normal_4"));
+            //sphereBundle.bEnvironmentTextured = true;
+            //sphereBundle.bModel = Content.Load<Model>("Models\\sphere_mapped");
 
-            renderManager.AddBundleModelWithCustomEffect(sphereBundle);
+            //renderManager.AddBundleModelWithCustomEffect(sphereBundle);
             renderManager.CustomEffect = customEffect;
             renderManager.Graphics = graphics;
             renderManager.Load();
@@ -121,7 +133,7 @@ namespace Laboration3Datorgrafik
             floor.SetEffectParameters(customEffect);
             renderManager.Floor = floor;
 
-            sphereReflection = new Reflection(speherePosition, graphics.GraphicsDevice, renderManager, customEffect);
+            //sphereReflection = new Reflection(speherePosition, graphics.GraphicsDevice, renderManager, customEffect);
 
             fCamera = new FlyingCamera();
 
@@ -245,7 +257,7 @@ namespace Laboration3Datorgrafik
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkGray, 1.0f, 0);
 
             renderManager.Draw();
-            sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
+          //  sphereReflection.RemapModel(customEffect, sphereBundle.bModel);
             base.Draw(gameTime);
         }
     }
