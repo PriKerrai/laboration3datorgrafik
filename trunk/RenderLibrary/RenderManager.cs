@@ -15,13 +15,11 @@ namespace RenderLibrary
         private List<BundleModel> bModels = new List<BundleModel>();
         private List<BundleModel> bModelsWithSpecialEffect = new List<BundleModel>();
         private ContentManager Content;
-        public RasterizerState rasterizerStateNormal;
-        public RasterizerState rasterizerStateNone;
-        public static RasterizerState CullingState = new RasterizerState { CullMode = CullMode.CullCounterClockwiseFace };
-        public static RasterizerState NoCullingState = new RasterizerState { CullMode = CullMode.None };
+        public static RasterizerState cullingState = new RasterizerState { CullMode = CullMode.CullCounterClockwiseFace };
+        public static RasterizerState noCullingState = new RasterizerState { CullMode = CullMode.None };
 
-        public static DepthStencilState ZBufferState = new DepthStencilState { DepthBufferEnable = true, DepthBufferWriteEnable = true };
-        public static DepthStencilState NoZBufferState = new DepthStencilState { DepthBufferEnable = true, DepthBufferWriteEnable = false };
+        public static DepthStencilState zBufferState = new DepthStencilState { DepthBufferEnable = true, DepthBufferWriteEnable = true };
+        public static DepthStencilState noZBufferState = new DepthStencilState { DepthBufferEnable = true, DepthBufferWriteEnable = false };
 
         public GraphicsDevice device;
         private Camera camera;
@@ -35,10 +33,6 @@ namespace RenderLibrary
             this.camera = camera;
             bundleModel = new BundleModel();
             this.device = device;
-            rasterizerStateNone = new RasterizerState();
-            rasterizerStateNormal = new RasterizerState();
-            rasterizerStateNone = RasterizerState.CullNone;
-            rasterizerStateNormal = RasterizerState.CullCounterClockwise;
         }
 
         public void AddBundleModelWithNoEffect(BundleModel bModel)
@@ -67,16 +61,16 @@ namespace RenderLibrary
             {
                 bModels[i].Draw(camera);
             }
-            Graphics.GraphicsDevice.DepthStencilState = ZBufferState;
-            Graphics.GraphicsDevice.RasterizerState = CullingState;
+            Graphics.GraphicsDevice.DepthStencilState =zBufferState;
+            Graphics.GraphicsDevice.RasterizerState = cullingState;
             for (int i = 0; i < bModelsWithSpecialEffect.Count; i++){
                 bModelsWithSpecialEffect[i].DrawSpecialEffect(Graphics.GraphicsDevice, camera, this);
             }
-            Graphics.GraphicsDevice.DepthStencilState = NoZBufferState;
-            Graphics.GraphicsDevice.RasterizerState = NoCullingState;
+            Graphics.GraphicsDevice.DepthStencilState = noZBufferState;
+            Graphics.GraphicsDevice.RasterizerState = noCullingState;
             for (int i = 0; i < bModelsWithSpecialEffect.Count; i++)
             {
-                bModelsWithSpecialEffect[i].DrawTranslucentMeshes(Graphics.GraphicsDevice, camera, this);
+                bModelsWithSpecialEffect[i].DrawTranslucentMeshes( camera, this);
             }
         }
 

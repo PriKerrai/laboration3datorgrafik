@@ -98,12 +98,16 @@ namespace Laboration3Datorgrafik
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, 1), "Models\\snowplow", 0.7f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, -1),"Models\\snowplow", 0.7f));
 
+    
+            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, -3), "Models\\snowplow", 0.7f));
+            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, -5), "Models\\snowplow", 0.7f));
+            
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-6, 0, 2), "Models\\jeep", 0.8f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-1, 5, 3), "Models\\BeachBall", 0.4f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(0, 0, 10), "Models\\moffett-old-building-a", 1));
             
-            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, -1), "Models\\snowplow", 0.7f));
+
 
             customEffect = Content.Load<Effect>("customEffect");
 
