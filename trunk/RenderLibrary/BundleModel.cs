@@ -15,7 +15,7 @@ namespace RenderLibrary
         public string bModelPath { get; set; }
         public float bScale { get; set; }
         public Texture2D bTexture { get; set; }
-        public Texture2D bNormalMap { get; set; }
+        public Texture2D bNormalMap {get; set; }
         public float bRotation { get; set; }
         public bool bEnvironmentTextured = false;
 
@@ -33,7 +33,7 @@ namespace RenderLibrary
             bScale = scale;
         }
 
-        public BundleModel(Vector3 position, string modelPath, float scale, Texture2D texture, Texture2D normalMap)
+        public BundleModel(Vector3 position, string modelPath, float scale, Texture2D texture, Texture2D normalMap) 
         {
             this.bPosition = position;
             this.bModelPath = modelPath;
@@ -44,7 +44,7 @@ namespace RenderLibrary
 
         public BundleModel()
         {
-
+            
         }
         public void Draw(Camera camera)
         {
@@ -56,7 +56,7 @@ namespace RenderLibrary
                     meshEffect.View = camera.ViewMatrix;
                     meshEffect.World = ((camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition)));
                     meshEffect.Projection = camera.ProjectionMatrix;
-
+              
                 }
                 mesh.Draw();
             }
@@ -70,7 +70,7 @@ namespace RenderLibrary
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
-                        if (part.Effect is BasicEffect)
+                        if (part.Effect is BasicEffect )
                         {
 
                             float alpha = ((BasicEffect)part.Effect).Alpha;
@@ -105,11 +105,10 @@ namespace RenderLibrary
                             }
 
                         }
-                    }
+                    }   
                 }
             }
         }
-
         public void DrawSpecialEffect(GraphicsDevice graphics, Camera camera, RenderManager rManager)
         {
             if (bModel != null)
@@ -122,28 +121,23 @@ namespace RenderLibrary
                         if (mesh.Effects[0].Parameters["Alpha"].GetValueSingle() == 1)
                         {
                             if (mesh.Name.Equals("Circle"))
-                            {
                                 graphics.RasterizerState = RenderManager.NoCullingState;
-                            }
                             else
-                            {
                                 graphics.RasterizerState = RenderManager.CullingState;
-                            }
                             part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
                             part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
                             part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                             part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
-                            //graphics.RasterizerState = RenderManager.CullingState;
+                            graphics.RasterizerState = RenderManager.CullingState;
+
                         }
                     }
-
                     mesh.Draw();
                 }
-                graphics.RasterizerState = RenderManager.CullingState;
                 //DrawTranslucentMeshes(bModel, camera, rManager);
             }
         }
-        public void DrawTranslucentMeshes(GraphicsDevice graphics, Camera camera, RenderManager rManager)
+        public void DrawTranslucentMeshes(Camera camera, RenderManager rManager)
         {
             foreach (ModelMesh mesh in bModel.Meshes)
             {
@@ -151,27 +145,21 @@ namespace RenderLibrary
                 {
                     if (mesh.Effects[0].Parameters["Alpha"].GetValueSingle() < 1)
                     {
-                        if (mesh.Effects[0].Parameters["Alpha"].GetValueSingle() == 1)
-                        {
-                            if (mesh.Name.Equals("Circle"))
-                            {
-                                graphics.RasterizerState = RenderManager.NoCullingState;
-                            }
-                            else
-                            {
-                                graphics.RasterizerState = RenderManager.CullingState;
-                            }
-                            //  rManager.device.RasterizerState = rManager.rasterizerStateNormal;
 
-                            part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
-                            part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
-                            part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                            part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
-                        }
+                      //  rManager.device.RasterizerState = rManager.rasterizerStateNormal;
+
+                        part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
+                        part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
+                        part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+                        part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
                     }
-                    mesh.Draw();
                 }
+                mesh.Draw();
             }
         }
+
+      
+    
+
     }
 }
