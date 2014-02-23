@@ -76,7 +76,7 @@ namespace RenderLibrary
             Graphics.GraphicsDevice.RasterizerState = NoCullingState;
             for (int i = 0; i < bModelsWithSpecialEffect.Count; i++)
             {
-                bModelsWithSpecialEffect[i].DrawTranslucentMeshes( camera, this);
+                bModelsWithSpecialEffect[i].DrawTranslucentMeshes(Graphics.GraphicsDevice, camera, this);
             }
         }
 

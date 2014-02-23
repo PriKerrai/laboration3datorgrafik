@@ -96,6 +96,7 @@ namespace Laboration3Datorgrafik
 
             floor = new Floor(GraphicsDevice, Content.Load<Texture2D>("Models\\setts"), Content.Load<Texture2D>("Models\\setts-normalmap"), 50, 50, new Vector3(0, 0, 0));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, 1), "Models\\snowplow", 0.7f));
+            renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(1, 1.001f, -1),"Models\\snowplow", 0.7f));
 
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(-6, 0, 2), "Models\\jeep", 0.8f));
             renderManager.AddBundleModelWithCustomEffect(new BundleModel(new Vector3(5, 5, 2), "Models\\Helicopter", 0.8f));
