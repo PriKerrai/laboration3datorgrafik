@@ -121,18 +121,19 @@ namespace RenderLibrary
                         if (mesh.Effects[0].Parameters["Alpha"].GetValueSingle() == 1)
                         {
                             if (mesh.Name.Equals("Circle"))
-                                graphics.RasterizerState = RenderManager.NoCullingState;
+                                graphics.RasterizerState = RenderManager.noCullingState;
                             else
-                                graphics.RasterizerState = RenderManager.CullingState;
+                                graphics.RasterizerState = RenderManager.cullingState;
                             part.Effect.Parameters["World"].SetValue(camera.WorldMatrix * mesh.ParentBone.Transform * Matrix.CreateScale(bScale) * Matrix.CreateRotationY(bRotation) * Matrix.CreateTranslation(bPosition));
                             part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
                             part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                             part.Effect.Parameters["EyePosition"].SetValue(camera.Position);
-                            graphics.RasterizerState = RenderManager.CullingState;
+                            
 
                         }
                     }
                     mesh.Draw();
+                    graphics.RasterizerState = RenderManager.cullingState;
                 }
                 //DrawTranslucentMeshes(bModel, camera, rManager);
             }
